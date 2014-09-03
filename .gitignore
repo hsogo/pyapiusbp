@@ -1,0 +1,13 @@
+#backup
+*~
+
+#misc
+*.log
+
+#python
+build/
+dist/
+_build/
+*.egg-info
+*.pyc
+
