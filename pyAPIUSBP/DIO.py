@@ -1,6 +1,12 @@
 import ctypes
+import warnings
 
-DLL = ctypes.windll.LoadLibrary('cdio.dll')
+try:
+    DLL = ctypes.windll.LoadLibrary('cdio.dll')
+except:
+    warnings.warn('cdio.dll is not found. DIO module will not work.')
+    DLL = None
+
 
 DEVICE_TYPE_ISA				= 0	#ISA or C bus
 DEVICE_TYPE_PCI				= 1	#PCI bus

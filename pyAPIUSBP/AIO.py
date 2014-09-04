@@ -1,6 +1,11 @@
 import ctypes
+import warnings
 
-DLL = ctypes.windll.LoadLibrary('caio.dll')
+try:
+    DLL = ctypes.windll.LoadLibrary('caio.dll')
+except:
+    warnings.warn('caio.dll is not found. AIO module will not work.')
+    DLL = None
 
 #----------------------------------------------------------------------------------------------
 # External Signal
@@ -1477,9 +1482,9 @@ class AIO(object):
         """
         This method writes data to multiple analog output channels.
         
-        :param list channelList:
+        :param list channes:
             List of channel numbers.
-        :param :
+        :param data:
             List of values (range of values depends on the device).
         """
         cData = (ctpyes.c_long*channels)()
@@ -1494,9 +1499,9 @@ class AIO(object):
         This method writes data (in voltage or current) to multiple analog
         output channels.
         
-        :param list channelList:
+        :param list channels:
             List of channel numbers.
-        :param :
+        :param data:
             List of values (range of values depends on the device).
         """
         cData = (ctpyes.c_float*channels)()
@@ -1714,12 +1719,12 @@ class AIO(object):
         """
         This method sets user buffer for analog output.
         This method works This method works only when user-buffer-mode is set by
-        :func:`pyAPISUBP.AIO.getAoTransferMode`
+        :func:`pyAPISUBP.AIO.getAoTransferMode`.
         See document of AioSetAoTransferData of API-USBP.
         
         :param int dataNumber:
             See document of AioSetAoTransferData of API-USBP.
-        ;param ctypes.c_long_array buffer:
+        :param ctypes.c_long_array buffer:
             See document of AioSetAoTransferData of API-USBP.
         """
         ret = DLL.AioSetAoTransferData(self.Id, dataNumber, buffer)
