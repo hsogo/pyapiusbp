@@ -1,7 +1,7 @@
 __version__ = '0.1.0'
 
-from pyAPIUSBP.DIO import *
-from pyAPIUSBP.AIO import *
+import pyAPIUSBP.DIO
+import pyAPIUSBP.AIO
 
 def dec2bitlist(val,fill=8):
     """
