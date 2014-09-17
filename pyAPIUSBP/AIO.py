@@ -2147,7 +2147,6 @@ class AIO(object):
         ret = DLL.AioOutputDoBit(self.Id, bit, data)
         if ret != 0: #failed
             raise ValueError, 'AioOutputDoBit failed (%s)' % self.getErrorString(ret)
-        return data.value
     
     def outputDoByte(self, port, data):
         """
@@ -2162,7 +2161,6 @@ class AIO(object):
         ret = DLL.AioOutputDoByte(self.Id, port, data)
         if ret != 0: #failed
             raise ValueError, 'AioOutputDoByte failed (%s)' % self.getErrorString(ret)
-        return data.value
     
     
     #------------------------------------------------------------------------------------------
