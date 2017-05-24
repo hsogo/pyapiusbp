@@ -27,7 +27,7 @@ in any way.
           'Programming Language :: Python',
           'Topic :: Scientific/Engineering',
       ],
-      keywords='API-USBP, I/O, USB',
+      keywords='API-USBP, I/O, Digital Input, Digital Output, USB',
       author='Hiroyuki Sogo',
       author_email='hsogo@ehime-u.ac.jp',
       url='http://sourceforge.net/p/pyapiusbp/',
