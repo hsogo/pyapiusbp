@@ -4,7 +4,7 @@ import warnings
 try:
     DLL = ctypes.windll.LoadLibrary('cdio.dll')
 except:
-    warnings.warn('cdio.dll is not found. DIO module will not work.')
+    warnings.warn('cdio.dll is not found or DIO unit is not connected. DIO module will not work.')
     DLL = None
 
 
@@ -297,6 +297,7 @@ class DIO(object):
             Name of device name. Use :func:`~pyAPIUSBP.DIO.queryDioDeviceName`
             to query device name.
         """
+        self.Id = None
         cId = ctypes.c_short()
         ret = DLL.DioInit(deviceName, ctypes.byref(cId))
         if ret != DIO_ERR_SUCCESS:
@@ -307,9 +308,10 @@ class DIO(object):
         """
         Destructor of DIO object.
         """
-        ret = DLL.DioExit(self.Id)
-        if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioExit failed (%s)' % self.getErrorString(ret)
+        if self.Id is not None:
+            ret = DLL.DioExit(self.Id)
+            if ret != DIO_ERR_SUCCESS:
+                raise ValueError, 'DioExit failed (%s)' % self.getErrorString(ret)
     
     def getErrorString(self, code):
         """

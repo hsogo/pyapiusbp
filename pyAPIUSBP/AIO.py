@@ -4,7 +4,7 @@ import warnings
 try:
     DLL = ctypes.windll.LoadLibrary('caio.dll')
 except:
-    warnings.warn('caio.dll is not found. AIO module will not work.')
+    warnings.warn('caio.dll is not found or AIO unit is not connected. AIO module will not work.')
     DLL = None
 
 #----------------------------------------------------------------------------------------------
