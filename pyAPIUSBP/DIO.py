@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import ctypes
 import warnings
 
@@ -301,7 +303,7 @@ class DIO(object):
         cId = ctypes.c_short()
         ret = DLL.DioInit(deviceName, ctypes.byref(cId))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioInit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioInit failed (%s)' % self.getErrorString(ret))
         self.Id = cId.value
         
     def __del__(self):
@@ -311,7 +313,7 @@ class DIO(object):
         if self.Id is not None:
             ret = DLL.DioExit(self.Id)
             if ret != DIO_ERR_SUCCESS:
-                raise ValueError, 'DioExit failed (%s)' % self.getErrorString(ret)
+                raise ValueError('DioExit failed (%s)' % self.getErrorString(ret))
     
     def getErrorString(self, code):
         """
@@ -330,7 +332,7 @@ class DIO(object):
         """
         ret = DLL.DioResetDevice(self.Id)
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioResetDevice failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioResetDevice failed (%s)' % self.getErrorString(ret))
     
     def inputByte(self, portNo):
         """
@@ -347,7 +349,7 @@ class DIO(object):
         data = ctypes.c_ubyte()
         ret = DLL.DioInpByte(self.Id, portNo, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioInpByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioInpByte failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def inputBit(self, bitNo):
@@ -363,7 +365,7 @@ class DIO(object):
         data = ctypes.c_ubyte()
         ret = DLL.DioInpBit(self.Id, bitNo, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioInpBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioInpBit failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def outputByte(self, portNo, data):
@@ -381,7 +383,7 @@ class DIO(object):
         """
         ret = DLL.DioOutByte(self.Id, portNo, data)
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioOutByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioOutByte failed (%s)' % self.getErrorString(ret))
     
     def outputBit(self, bitNo, data):
         """
@@ -395,7 +397,7 @@ class DIO(object):
         """
         ret = DLL.DioOutBit(self.Id, portNo, data)
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioOutBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioOutBit failed (%s)' % self.getErrorString(ret))
     
     def echoBackByte(self, portNo):
         """
@@ -412,7 +414,7 @@ class DIO(object):
         data = ctypes.c_ubyte()
         ret = DLL.DioEchoBackByte(self.Id, portNo, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioEchoBackByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioEchoBackByte failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def echoBackBit(self, bitNo):
@@ -428,7 +430,7 @@ class DIO(object):
         data = ctypes.c_ubyte()
         ret = DLL.DioEchoBackByte(self.Id, bitNo, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioEchoBackBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioEchoBackBit failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def inputMultiByte(self, portList):
@@ -447,7 +449,7 @@ class DIO(object):
             portNo[i] = portList[i]
         ret = DLL.DioInpMultiByte(self.Id, ctypes.byref(portNo), portNum, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioInpMultiByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioInpMultiByte failed (%s)' % self.getErrorString(ret))
         return list(data)
         
     def inputMultiBit(self, bitList):
@@ -466,7 +468,7 @@ class DIO(object):
             bitNo[i] = bitList[i]
         ret = DLL.DioInpMultiBit(self.Id, ctypes.byref(bitNo), bitNum, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioInpMultiBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioInpMultiBit failed (%s)' % self.getErrorString(ret))
         return list(data)
    
     def outputMultiByte(self, portList, data):
@@ -486,7 +488,7 @@ class DIO(object):
             cdata[i] = data[i]
         ret = DLL.DioOutMultiByte(self.Id, ctypes.byref(portNo), portNum, ctypes.byref(cdata))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioOutMultiByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioOutMultiByte failed (%s)' % self.getErrorString(ret))
         
     def outputMultiBit(self, bitList, data):
         """
@@ -505,7 +507,7 @@ class DIO(object):
             cdata[i] = data[i]
         ret = DLL.DioOutMultiBit(self.Id, ctypes.byref(bitNo), bitNum, ctypes.byref(cdata))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioOutMultiBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioOutMultiBit failed (%s)' % self.getErrorString(ret))
     
     def echoBackMultiByte(self, portList):
         """
@@ -523,7 +525,7 @@ class DIO(object):
             portNo[i] = portList[i]
         ret = DLL.DioEchoBackMultiByte(self.Id, ctypes.byref(portNo), portNum, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioEchoBackMultiByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioEchoBackMultiByte failed (%s)' % self.getErrorString(ret))
         return list(data)
         
     def echoBackMultiBit(self, bitList):
@@ -542,7 +544,7 @@ class DIO(object):
             bitNo[i] = bitList[i]
         ret = DLL.DioEchoBackMultiBit(self.Id, ctypes.byref(bitNo), bitNum, ctypes.byref(data))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioEchoBackMultiBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioEchoBackMultiBit failed (%s)' % self.getErrorString(ret))
         return list(data)
    
     def getMaxPorts(self):
@@ -553,6 +555,6 @@ class DIO(object):
         outPortNum = ctypes.c_short()
         ret = DLL.DioGetMaxPorts(self.Id, ctypes.byref(inPortNum), ctypes.byref(outPortNum))
         if ret != DIO_ERR_SUCCESS:
-            raise ValueError, 'DioGetMaxPorts failed (%s)' % self.getErrorString(ret)
+            raise ValueError('DioGetMaxPorts failed (%s)' % self.getErrorString(ret))
         return {'in':inPortNum.value, 'out':outPortNum.value}
     

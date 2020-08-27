@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import ctypes
 import warnings
 
@@ -465,7 +467,7 @@ def getAioDeviceType(device):
     if ret != 0: #failed
         msg = (ctypes.c_char*256)()
         DLL.AioGetErrorString(ret,ctypes.byref(msg))
-        raise ValueError, 'AioGetDeviceType failed (%s)' % msg.value
+        raise ValueError('AioGetDeviceType failed (%s)' % msg.value)
     if deviceType.value == 1:
         return 'PCI'
     elif deviceType.value == 2:
@@ -564,7 +566,7 @@ class AIO(object):
         cId = ctypes.c_short()
         ret = DLL.AioInit(deviceName, ctypes.byref(cId))
         if ret != 0: #failed
-            raise ValueError, 'AioInit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioInit failed (%s)' % self.getErrorString(ret))
         self.Id = cId.value
         
     def __del__(self):
@@ -574,7 +576,7 @@ class AIO(object):
         if self.Id is not None:
             ret = DLL.AioExit(self.Id)
             if ret != 0: #failed
-                raise ValueError, 'AioExit failed (%s)' % self.getErrorString(ret)
+                raise ValueError('AioExit failed (%s)' % self.getErrorString(ret))
     
     #------------------------------------------------------------------------------------------
     # Common functions
@@ -596,7 +598,7 @@ class AIO(object):
         """
         ret = DLL.AioResetProcess(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioResetProcess failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetProcess failed (%s)' % self.getErrorString(ret))
     
     def resetDevice(self):
         """
@@ -604,7 +606,7 @@ class AIO(object):
         """
         ret = DLL.AioResetDevice(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioResetDevice failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetDevice failed (%s)' % self.getErrorString(ret))
     
     def setControlFilter(self, signal, value):
         """
@@ -617,13 +619,13 @@ class AIO(object):
             See document of AioSetControlFilter
         """
         if not signal in CONST_AIO_EXTERNAL_SIGNALS:
-            raise ValueError, 'Invalid signal'
+            raise ValueError('Invalid signal')
         if not value in [0, 0.05, 1, 10, 100, 128, 16000]:
-            raise ValueError, 'Invalid value'
+            raise ValueError('Invalid value')
         
         ret = DLL.AioSetControlFilter(self.Id, signal, value)
         if ret != 0: #failed
-            raise ValueError, 'AioSetControlFilter failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetControlFilter failed (%s)' % self.getErrorString(ret))
     
     def getControlFilter(self, signal):
         """
@@ -636,11 +638,11 @@ class AIO(object):
             See document of AioGetControlFilter
         """
         if not signal in CONST_AIO_EXTERNAL_SIGNALS:
-            raise ValueError, 'Invalid signal'
+            raise ValueError('Invalid signal')
         value = ctypes.c_flaot()
         ret = DLL.AioGetControlFilter(self.Id, signal, ctypes.byref(value))
         if ret != 0: #failed
-            raise ValueError, 'AioGetControlFilter failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetControlFilter failed (%s)' % self.getErrorString(ret))
         return value.value
     
     #------------------------------------------------------------------------------------------
@@ -659,7 +661,7 @@ class AIO(object):
         data = ctypes.c_ulong()
         ret = DLL.AioSingleAi(self.Id, channel, ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioSingleAi failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSingleAi failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def singleAiEx(self, channel):
@@ -675,7 +677,7 @@ class AIO(object):
         data = ctypes.c_float()
         ret = DLL.AioSingleAiEx(self.Id, channel, ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioSingleAi failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSingleAi failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def multiAi(self, channelList):
@@ -691,7 +693,7 @@ class AIO(object):
         data = (ctypes.c_long*nch)()
         ret = DLL.AioMultiAi(self.Id, nch, ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioMultiAi failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioMultiAi failed (%s)' % self.getErrorString(ret))
         return list(data)
     
     def multiAiEx(self, channelList):
@@ -708,7 +710,7 @@ class AIO(object):
         data = (ctypes.c_long*nch)()
         ret = DLL.AioMultiAiEx(self.Id, nch, ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioMultiAiEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioMultiAiEx failed (%s)' % self.getErrorString(ret))
         return list(data)
     
     #----- Resolution -----
@@ -723,7 +725,7 @@ class AIO(object):
         resolution = ctypes.c_short()
         ret = DLL.AioGetAiResolution(self.Id, ctypes.byref(resolution))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiResolution failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiResolution failed (%s)' % self.getErrorString(ret))
         
     #----- Input method -----
     def setAiInputMethod(self, method):
@@ -734,10 +736,10 @@ class AIO(object):
             0 for single-ended, 1 for differential.
         """
         if not method in [CONST_SINGLE_END, CONST_DIFFERENTIAL]:
-            raise ValueError, 'method must be CONST_SINGLE_END or CONST_DIFFERENTIAL.'
+            raise ValueError('method must be CONST_SINGLE_END or CONST_DIFFERENTIAL.')
         ret = DLL.AioSetAiInputMethod(self.Id, method)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiInputMethod failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiInputMethod failed (%s)' % self.getErrorString(ret))
         
     def getAiInputMethod(self):
         """
@@ -749,7 +751,7 @@ class AIO(object):
         method = ctypes.c_short()
         ret = DLL.AioGetAiInputMethod(self.Id, ctypes.byref(method))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiInputMethod failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiInputMethod failed (%s)' % self.getErrorString(ret))
         return method.value
     
     #----- Channel settings -----
@@ -763,7 +765,7 @@ class AIO(object):
         channels = ctypes.c_short()
         ret = DLL.AioGetAiMaxChannels(self.Id, ctypes.byref(channels))
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiMaxChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiMaxChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
         
     def setAiChannels(self, channels):
@@ -775,7 +777,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiChannels(self.Id, channels)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiChannels failed (%s)' % self.getErrorString(ret))
         
     def getAiChannels(self):
         """
@@ -788,7 +790,7 @@ class AIO(object):
         channels = ctypes.c_short()
         ret = DLL.AioGetAiChannels(self.Id, ctypes.byref(channels))
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
     
     def setAiChannelSequence(self, sequence, channel):
@@ -803,7 +805,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiChannelSequence(self.Id, sequence, channel)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiChannelSequence failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiChannelSequence failed (%s)' % self.getErrorString(ret))
     
     def getAiChannelSequence(self, sequence):
         """
@@ -818,7 +820,7 @@ class AIO(object):
         channel = ctypes.c_short()
         ret = DLL.AioGetAiChannelSequence(self.Id, sequence, ctypes.byref(channel))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiChannelSequence failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiChannelSequence failed (%s)' % self.getErrorString(ret))
         return channel.value
     
     #----- Range settings -----
@@ -834,7 +836,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiRange(self.Id, channel, AiRange)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiRange failed (%s)' % self.getErrorString(ret))
     
     def setAiRangeAll(self, AiRange):
         """
@@ -846,7 +848,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiRangeAll(self.Id, AiRange)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiRangeAll failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiRangeAll failed (%s)' % self.getErrorString(ret))
     
     def getAiRange(self, channel):
         """
@@ -861,7 +863,7 @@ class AIO(object):
         AiRange = ctypes.c_short()
         ret = DLL.AioGetAiChannels(self.Id, ctypes.byref(AiRange))
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiRange failed (%s)' % self.getErrorString(ret))
         return AiRange.value
     
     #----- Transfer modes -----
@@ -874,10 +876,10 @@ class AIO(object):
             pyAPIUSBP.AIO.CONST_USER_BUFFER for user-buffer-mode.
         """
         if not mode in [CONST_DEVICE_BUFFER, CONST_USER_BUFFER]:
-            raise ValueError, 'mode must be CONST_DEVICE_BUFFER or CONST_USER_BUFFER.'
+            raise ValueError('mode must be CONST_DEVICE_BUFFER or CONST_USER_BUFFER.')
         ret = DLL.AioSetAiTransferMode(self.Id, mode)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiTransferMode failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiTransferMode failed (%s)' % self.getErrorString(ret))
     
     def getAiTransferMode(self):
         """
@@ -890,7 +892,7 @@ class AIO(object):
         mode = ctypes.c_short()
         ret = DLL.AioGetAiTransferMode(self.Id, ctypes.byref(mode))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiTransferMode failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiTransferMode failed (%s)' % self.getErrorString(ret))
         return mode.value
     
     #----- Memory types -----
@@ -903,10 +905,10 @@ class AIO(object):
             See document of AioSetAiMemoryType of API-USBP.
         """
         if not memType in [CONST_FIFO, CONST_RING, CONST_MEMORY_NO_OVERWRITE, CONST_MEMORY_OVERWRITE]:
-            raise ValueError, 'memType must be CONST_FIFO, CONST_RING, CONST_MEMORY_NO_OVERWRITE or CONST_MEMORY_OVERWRITE'
+            raise ValueError('memType must be CONST_FIFO, CONST_RING, CONST_MEMORY_NO_OVERWRITE or CONST_MEMORY_OVERWRITE')
         ret = DLL.AioSetAiMemoryType(self.Id, memType)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiMemoryType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiMemoryType failed (%s)' % self.getErrorString(ret))
     
     def getAiMemoryType(self):
         """
@@ -919,7 +921,7 @@ class AIO(object):
         memType = ctypes.c_short()
         ret = DLL.AioGetAiMemoryType(self.Id, ctypes.byref(memType))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiMemoryType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiMemoryType failed (%s)' % self.getErrorString(ret))
         return memType.value
     
     #----- Clock settings -----
@@ -929,7 +931,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiClockType(self.Id, clockType)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiClockType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiClockType failed (%s)' % self.getErrorString(ret))
     
     def getAiClockType(self):
         """
@@ -938,7 +940,7 @@ class AIO(object):
         clockType = ctypes.c_short()
         ret = DLL.AioGetAiClockType(self.Id, ctypes.byref(clockType))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiClockType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiClockType failed (%s)' % self.getErrorString(ret))
         return clockType.value
     
     def setAiScanClock(self, clock):
@@ -947,7 +949,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiScanClock(self.Id, clock)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiScanClock failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiScanClock failed (%s)' % self.getErrorString(ret))
     
     def getAiScanClock(self):
         """
@@ -956,7 +958,7 @@ class AIO(object):
         clock = ctypes.c_float()
         ret = DLL.AioGetAiScanClock(self.Id, ctypes.byref(clock))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiScanClock failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiScanClock failed (%s)' % self.getErrorString(ret))
         return clock.value
     
     def setAiSamplingClock(self, clock):
@@ -965,7 +967,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiSamplingClock(self.Id, clock)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiSamplingClock failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiSamplingClock failed (%s)' % self.getErrorString(ret))
     
     def getAiSamplingClock(self):
         """
@@ -974,7 +976,7 @@ class AIO(object):
         clock = ctypes.c_float()
         ret = DLL.AioGetAiSamplingClock(self.Id, ctypes.byref(clock))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiSamplingClock failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiSamplingClock failed (%s)' % self.getErrorString(ret))
         return clock.value
     
     def setAiClockEdge(self, edge):
@@ -982,10 +984,10 @@ class AIO(object):
         See document of AioSetAiClockEdge of API-USBP.
         """
         if not edge in [CONST_FALLING_EDGE, CONST_RISING_EDGE]:
-            raise ValueError, 'Edge must be CONST_FALLING_EDGE or CONST_RISING_EDGE.'
+            raise ValueError('Edge must be CONST_FALLING_EDGE or CONST_RISING_EDGE.')
         ret = DLL.AioSetAiClockEdge(self.Id, edge)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiClockEdge failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiClockEdge failed (%s)' % self.getErrorString(ret))
     
     def getAiClockEdge(self):
         """
@@ -994,7 +996,7 @@ class AIO(object):
         edge = ctypes.c_short()
         ret = DLL.AioGetAiClockEdge(self.Id, ctypes.byref(edge))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiClockEdge failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiClockEdge failed (%s)' % self.getErrorString(ret))
         return edge.value
     
     #----- Start trigger -----
@@ -1004,7 +1006,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStartTrigger(self.Id, trigger)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartTrigger failed (%s)' % self.getErrorString(ret))
     
     def getAiStartTrigger(self):
         """
@@ -1013,7 +1015,7 @@ class AIO(object):
         trigger = ctypes.c_short()
         ret = DLL.AioGetAiStartTrigger(self.Id, ctypes.byref(trigger))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
     
     def setAiStartLevel(self, channel, level, direction):
@@ -1021,20 +1023,20 @@ class AIO(object):
         See document of AioSetAiStartLevel of API-USBP.
         """
         if not direction in [CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION, CONST_FALLING_DIRECTION]:
-            raise ValueError, 'direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.'
+            raise ValueError('direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.')
         ret = DLL.AioSetAiStartLevel(self.Id, channel, level, direction)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartLevel failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartLevel failed (%s)' % self.getErrorString(ret))
     
     def setAiStartLevelEx(self, channel, level, direction):
         """
         See document of AioSetAiStartLevelEx of API-USBP.
         """
         if not direction in [CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION, CONST_FALLING_DIRECTION]:
-            raise ValueError, 'direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.'
+            raise ValueError('direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.')
         ret = DLL.AioSetAiStartLevelEx(self.Id, channel, level, direction)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartLevelEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartLevelEx failed (%s)' % self.getErrorString(ret))
     
     def getAiStartLevel(self, channel):
         """
@@ -1044,7 +1046,7 @@ class AIO(object):
         direction = ctypes.c_short()
         ret = DLL.AioGetAiStartLevel(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartLevel failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartLevel failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     def getAiStartLevelEx(self, channel):
@@ -1055,7 +1057,7 @@ class AIO(object):
         direction = ctypes.c_short()
         ret = DLL.AioGetAiStartLevelEx(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartLevelEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartLevelEx failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     def setAiStartInRange(self, channel, level1, level2, stateTimes):
@@ -1064,7 +1066,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStartInRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartInRange failed (%s)' % self.getErrorString(ret))
     
     def setAiStartInRangeEx(self, channel, level1, level2, stateTimes):
         """
@@ -1072,7 +1074,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStartInRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartInRange failed (%s)' % self.getErrorString(ret))
     
     def getAiStartInRange(self, channel):
         """
@@ -1083,7 +1085,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStartInRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartInRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
     
     def getAiStartInRangeEx(self, channel):
@@ -1095,7 +1097,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStartInRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartInRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     def setAiStartOutRange(self, channel, level1, level2, stateTimes):
@@ -1104,7 +1106,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStartOutRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartOutRange failed (%s)' % self.getErrorString(ret))
     
     def setAiStartOutRangeEx(self, channel, level1, level2, stateTimes):
         """
@@ -1112,7 +1114,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStartOutRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStartOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStartOutRange failed (%s)' % self.getErrorString(ret))
     
     def getAiStartOutRange(self, channel):
         """
@@ -1123,7 +1125,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStartOutRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
     
     def getAiStartOutRangeEx(self, channel):
@@ -1135,7 +1137,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStartOutRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     #----- Stop trigger -----
@@ -1145,7 +1147,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopTrigger(self.Id, trigger)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopTrigger failed (%s)' % self.getErrorString(ret))
     
     def getAiStopTrigger(self):
         """
@@ -1154,7 +1156,7 @@ class AIO(object):
         trigger = ctypes.c_short()
         ret = DLL.AioGetAiStopTrigger(self.Id, ctypes.byref(trigger))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
     
     def setAiStopTimes(self, stopTimes):
@@ -1163,7 +1165,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopTimes(self.Id, stopTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopTimes failed (%s)' % self.getErrorString(ret))
     
     def getAiStopTimes(self):
         """
@@ -1172,7 +1174,7 @@ class AIO(object):
         stopTimes = ctypes.c_long()
         ret = DLL.AioGetAiStopTimes(self.Id, ctypes.byref(stopTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopTimes failed (%s)' % self.getErrorString(ret))
         return stopTimes.value
     
     def setAiStopLevel(self, channel, level, direction):
@@ -1180,20 +1182,20 @@ class AIO(object):
         See document of AioSetAiStopLevel of API-USBP.
         """
         if not direction in [CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION, CONST_FALLING_DIRECTION]:
-            raise ValueError, 'direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.'
+            raise ValueError('direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.')
         ret = DLL.AioSetAiStopLevel(self.Id, channel, level, direction)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopLevel failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopLevel failed (%s)' % self.getErrorString(ret))
     
     def setAiStopLevelEx(self, channel, level, direction):
         """
         See document of AioSetAiStopLevelEx of API-USBP.
         """
         if not direction in [CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION, CONST_FALLING_DIRECTION]:
-            raise ValueError, 'direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.'
+            raise ValueError('direction must be CONST_BOTH_DIRECTION, CONST_RISING_DIRECTION or CONST_FALLING_DIRECTION.')
         ret = DLL.AioSetAiStopLevelEx(self.Id, channel, level, direction)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopLevelEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopLevelEx failed (%s)' % self.getErrorString(ret))
     
     def getAiStopLevel(self, channel):
         """
@@ -1203,7 +1205,7 @@ class AIO(object):
         direction = ctypes.c_short()
         ret = DLL.AioGetAiStopLevel(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopLevel failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopLevel failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     def getAiStopLevelEx(self, channel):
@@ -1214,7 +1216,7 @@ class AIO(object):
         direction = ctypes.c_short()
         ret = DLL.AioGetAiStopLevelEx(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopLevelEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopLevelEx failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     def setAiStopInRange(self, channel, level1, level2, stateTimes):
@@ -1223,7 +1225,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopInRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopInRange failed (%s)' % self.getErrorString(ret))
     
     def setAiStopInRangeEx(self, channel, level1, level2, stateTimes):
         """
@@ -1231,7 +1233,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopInRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopInRange failed (%s)' % self.getErrorString(ret))
     
     def getAiStopInRange(self, channel):
         """
@@ -1242,7 +1244,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStopInRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopInRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
     
     def getAiStopInRangeEx(self, channel):
@@ -1254,7 +1256,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStopInRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopInRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopInRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     def setAiStopOutRange(self, channel, level1, level2, stateTimes):
@@ -1263,7 +1265,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopOutRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopOutRange failed (%s)' % self.getErrorString(ret))
     
     def setAiStopOutRangeEx(self, channel, level1, level2, stateTimes):
         """
@@ -1271,7 +1273,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopOutRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopOutRange failed (%s)' % self.getErrorString(ret))
     
     def getAiStopOutRange(self, channel):
         """
@@ -1282,7 +1284,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStopOutRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
     
     def getAiStopOutRangeEx(self, channel):
@@ -1294,7 +1296,7 @@ class AIO(object):
         stateTimes = ctypes.c_short()
         ret = DLL.AioGetAiStopOutRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
     
     #----- Delay time -----
@@ -1304,7 +1306,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiStopDelayTimes(self.Id, delayTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiStopDelayTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiStopDelayTimes failed (%s)' % self.getErrorString(ret))
     
     def getAiStopDelayTimes(self):
         """
@@ -1313,7 +1315,7 @@ class AIO(object):
         delayTimes = ctypes.c_long()
         ret = DLL.AioSetAiStopDelayTimes(self.Id, ctypes.byref(delayTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopDelayTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopDelayTimes failed (%s)' % self.getErrorString(ret))
         return delayTimes.value
     
     #----- Repeat times -----
@@ -1323,7 +1325,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiRepeatTimes(self.Id, repeatTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiRepeatTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiRepeatTimes failed (%s)' % self.getErrorString(ret))
     
     def getAiRepeatTimes(self):
         """
@@ -1332,7 +1334,7 @@ class AIO(object):
         repeatTimes = ctypes.c_long()
         ret = DLL.AioGetAiRepeatTimes(self.Id, ctypes.byref(repeatTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiRepeatTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiRepeatTimes failed (%s)' % self.getErrorString(ret))
         return repeatTimes.value
     
     #----- Events -----
@@ -1348,7 +1350,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiEvent(self.Id, hWnd, event)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiEvent failed (%s)' % self.getErrorString(ret))
     
     def getAiEvent(self):
         """
@@ -1362,7 +1364,7 @@ class AIO(object):
         event = ctypes.c_long()
         ret = DLL.AioGetAiEvent(self.Id, ctypes.byref(hWnd), ctypes.byref(event))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
         
     def setAiCallBackProc(self, callbackProc, event, param):
@@ -1379,7 +1381,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiCallBackProc(self.Id, callbackProc, event, param)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiCallBackProc Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiCallBackProc Failed (%s)' % self.getErrorString(ret))
     
     def setAiEventSamplingTimes(self, samplingTimes):
         """
@@ -1391,7 +1393,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiEventSamplingTimes(self.Id , samplingTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiEventSamplingTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiEventSamplingTimes Failed (%s)' % self.getErrorString(ret))
     
     def getAiEventSamplingTimes(self):
         """
@@ -1404,7 +1406,7 @@ class AIO(object):
         samplingTimes = ctypes.c_long()
         ret = DLL.AioGetAiEventSamplingTimes(self.Id , ctypes.byref(samplingTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiEventSamplingTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiEventSamplingTimes Failed (%s)' % self.getErrorString(ret))
     
     def setAiEventTransferTimes(self, transferTimes):
         """
@@ -1416,7 +1418,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAiEventTransferTimes(self.Id , transferTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAiEventTransferTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAiEventTransferTimes Failed (%s)' % self.getErrorString(ret))
     
     def getAiEventTransferTimes(self):
         """
@@ -1429,7 +1431,7 @@ class AIO(object):
         transferTimes = ctypes.c_long()
         ret = DLL.AioGetAiEventTransferTimes(self.Id , ctypes.byref(transferTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiEventTransferTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiEventTransferTimes Failed (%s)' % self.getErrorString(ret))
     
     #----- Start/Stop -----
     def startAi(self):
@@ -1439,7 +1441,7 @@ class AIO(object):
         """
         ret = DLL.AioStartAi(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioStartAi failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStartAi failed (%s)' % self.getErrorString(ret))
     
     def startAiSync(self, timeOut):
         """
@@ -1451,7 +1453,7 @@ class AIO(object):
         """
         ret = DLL.AioStartAiSync(self.Id, timeOut)
         if ret != 0: #failed
-            raise ValueError, 'AioStartAiSync failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStartAiSync failed (%s)' % self.getErrorString(ret))
     
     def stopAi(self):
         """
@@ -1460,7 +1462,7 @@ class AIO(object):
         """
         ret = DLL.AioStopAi(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioStoptAi failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStoptAi failed (%s)' % self.getErrorString(ret))
     
     #----- Getting status -----
     def getAiStatus(self):
@@ -1476,7 +1478,7 @@ class AIO(object):
         status = ctypes.c_long()
         ret = DLL.AioGetAiStatus(self.Id, ctypes.byref(status))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStatus failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStatus failed (%s)' % self.getErrorString(ret))
         return status.value
     
     def getAiSamplingCount(self):
@@ -1492,7 +1494,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAiSamplingCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiSamplingCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiSamplingCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     def getAiStopTriggerCount(self):
@@ -1508,7 +1510,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAiStopTriggerCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopTriggerCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopTriggerCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     def getAiTransferCount(self):
@@ -1524,7 +1526,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAiTransferCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiTransferCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiTransferCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     def getAiTransferLap(self):
@@ -1540,7 +1542,7 @@ class AIO(object):
         lap = ctypes.c_long()
         ret = DLL.AioGetAiTransferLap(self.Id, ctypes.byref(lap))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiTransferLap failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiTransferLap failed (%s)' % self.getErrorString(ret))
         return lap.value
     
     def getAiStopTriggerTransferCount(self):
@@ -1556,7 +1558,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAiStopTriggerTransferCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiStopTriggerTransferCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiStopTriggerTransferCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     def getAiRepeatCount(self):
@@ -1570,7 +1572,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAiRepeatCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiRepeatCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiRepeatCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     #----- Data aquisition -----
@@ -1590,7 +1592,7 @@ class AIO(object):
         data = (ctypes.c_long*samplingTimes)()
         ret = DLL.AioGetAiSamplingData(self.Id, ctypes.byref(cSamplingTimes), ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiSamplingTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiSamplingTimes failed (%s)' % self.getErrorString(ret))
         return (cSamplingTimes.value, list(data))
     
     def getAiSamplingDataEx(self, samplingTimes):
@@ -1609,7 +1611,7 @@ class AIO(object):
         data = (ctypes.c_float*samplingTimes)()
         ret = DLL.AioGetAiSamplingDataEx(self.Id, ctypes.byref(cSamplingTimes), ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAiSamplingTimesEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAiSamplingTimesEx failed (%s)' % self.getErrorString(ret))
         return (cSamplingTimes.value, list(data))
     
     #----- Reset -----
@@ -1623,7 +1625,7 @@ class AIO(object):
         """
         ret = DLL.AioResetAiStatus(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioResetAiStatus failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetAiStatus failed (%s)' % self.getErrorString(ret))
     
     def resetAiMemory(self):
         """
@@ -1637,7 +1639,7 @@ class AIO(object):
         """
         ret = DLL.AioResetAiMemory(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioResetAiMemory failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetAiMemory failed (%s)' % self.getErrorString(ret))
     
     
     #------------------------------------------------------------------------------------------
@@ -1655,7 +1657,7 @@ class AIO(object):
         """
         ret = DLL.AioSingleAo(self.Id, channel, data)
         if ret != 0: #failed
-            raise ValueError, 'AioSingleAo failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSingleAo failed (%s)' % self.getErrorString(ret))
     
     def singleAoEx(self, channel, data):
         """
@@ -1669,7 +1671,7 @@ class AIO(object):
         """
         ret = DLL.AioSingleAoEx(self.Id, channel, data)
         if ret != 0: #failed
-            raise ValueError, 'AioSingleAoEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSingleAoEx failed (%s)' % self.getErrorString(ret))
     
     def multiAo(self, channels, data):
         """
@@ -1685,7 +1687,7 @@ class AIO(object):
             cData[i] = data[i]
         ret = DLL.AioMultiAo(self.Id, channel, ctypes.byref(cData))
         if ret != 0: #failed
-            raise ValueError, 'AioMultiAo failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioMultiAo failed (%s)' % self.getErrorString(ret))
     
     def multiAoEx(self, channels, data):
         """
@@ -1702,7 +1704,7 @@ class AIO(object):
             cData[i] = data[i]
         ret = DLL.AioMultiAoEx(self.Id, channel, ctypes.byref(cData))
         if ret != 0: #failed
-            raise ValueError, 'AioMultiAoEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioMultiAoEx failed (%s)' % self.getErrorString(ret))
     
     #----- Resolution -----
     def getAoResolution(self):
@@ -1716,7 +1718,7 @@ class AIO(object):
         resolution = ctpyes.c_short()
         ret = DLL.AioGetAoResolution(self.Id, ctypes.byref(resolution))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoResolution failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoResolution failed (%s)' % self.getErrorString(ret))
         return resolution.value
     
     #----- Channels -----
@@ -1729,7 +1731,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoChannels(self.Id, channels)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoChannels failed (%s)' % self.getErrorString(ret))
     
     def getAoChannels(self):
         """
@@ -1742,7 +1744,7 @@ class AIO(object):
         channels = ctypes.c_short()
         ret = DLL.AioGetAoChannels(self.Id, ctypes.byref(channels))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
     
     def getAoMaxChannels(self):
@@ -1755,7 +1757,7 @@ class AIO(object):
         channels = ctypes.c_short()
         ret = DLL.AioGetAoMaxChannels(self.Id, ctypes.byref(channels))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoMaxChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoMaxChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
     
     #----- Range -----
@@ -1771,7 +1773,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoRange(self.Id, channel, range)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoRange failed (%s)' % self.getErrorString(ret))
     
     def setAoRangeAll(self, range):
         """
@@ -1783,7 +1785,7 @@ class AIO(object):
         """
         ret = DLL.AioGetAoRange(self.Id, range)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoRangeAll failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoRangeAll failed (%s)' % self.getErrorString(ret))
     
     def getAoRange(self, channel):
         """
@@ -1798,7 +1800,7 @@ class AIO(object):
         range = ctypes.c_short()
         ret = DLL.AioGetAoRange(self.Id, ctypes.byref(range))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoRange failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoRange failed (%s)' % self.getErrorString(ret))
         return range.value
     
     #----- Transfer mode -----
@@ -1811,10 +1813,10 @@ class AIO(object):
             pyAPIUSBP.AIO.CONST_USER_BUFFER for user-buffer-mode.
         """
         if not mode in [CONST_DEVICE_BUFFER, CONST_USER_BUFFER]:
-            raise ValueError, 'mode must be CONST_DEVICE_BUFFER or CONST_USER_BUFFER.'
+            raise ValueError('mode must be CONST_DEVICE_BUFFER or CONST_USER_BUFFER.')
         ret = DLL.AioSetAoTransferMode(self.Id, mode)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoTransferMode failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoTransferMode failed (%s)' % self.getErrorString(ret))
     
     def getAoTransferMode(self):
         """
@@ -1827,7 +1829,7 @@ class AIO(object):
         mode = ctypes.c_short()
         ret = DLL.AioGetAoTransferMode(self.Id, ctypes.byref(mode))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoTransferMode failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoTransferMode failed (%s)' % self.getErrorString(ret))
         return mode.value
     
     #----- Memory type -----
@@ -1840,10 +1842,10 @@ class AIO(object):
             See document of AioSetAoMemoryType of API-USBP.
         """
         if not memType in [CONST_FIFO, CONST_RING, CONST_MEMORY_NO_REPEAT, CONST_MEMORY_REPEAT]:
-            raise ValueError, 'memType must be CONST_FIFO, CONST_RING, CONST_MEMORY_NO_REPEAT or CONST_MEMORY_REPEAT'
+            raise ValueError('memType must be CONST_FIFO, CONST_RING, CONST_MEMORY_NO_REPEAT or CONST_MEMORY_REPEAT')
         ret = DLL.AioSetAoMemoryType(self.Id, memType)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoMemoryType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoMemoryType failed (%s)' % self.getErrorString(ret))
     
     def getAoMemoryType(self):
         """
@@ -1856,7 +1858,7 @@ class AIO(object):
         memType = ctypes.c_short()
         ret = DLL.AioGetAoMemoryType(self.Id, ctypes.byref(memType))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoMemoryType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoMemoryType failed (%s)' % self.getErrorString(ret))
         return memType.value
     
     #----- Data settings -----
@@ -1875,7 +1877,7 @@ class AIO(object):
             cData[i] = data[i]
         ret = DLL.AioSetAoSamplingData(self.Id, samplingTimes, ctypes.byref(cData))
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoSamplingData failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoSamplingData failed (%s)' % self.getErrorString(ret))
     
     def setAoSamplingDataEx(self, samplingTimes, data):
         """
@@ -1892,7 +1894,7 @@ class AIO(object):
             cData[i] = data[i]
         ret = DLL.AioSetAoSamplingDataEx(self.Id, samplingTimes, ctypes.byref(cData))
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoSamplingDataEx failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoSamplingDataEx failed (%s)' % self.getErrorString(ret))
     
     def getAoSamplingTimes(self):
         """
@@ -1905,7 +1907,7 @@ class AIO(object):
         samplingTimes = ctypes.c_long()
         ret = DLL.AioGetAoSamplingTimes(self.Id, ctypes.byref(samplingTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoSamplingTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoSamplingTimes failed (%s)' % self.getErrorString(ret))
         return samplingTimes.value
     
     def setAoTransferData(self, dataNumber, buffer):
@@ -1922,7 +1924,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoTransferData(self.Id, dataNumber, buffer)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoTransferData failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoTransferData failed (%s)' % self.getErrorString(ret))
     
     def getAoSamplingDataSize(self):
         """
@@ -1936,7 +1938,7 @@ class AIO(object):
         dataSize = ctypes.c_short()
         ret = DLL.AioGetAoSamplingDataSize(self.Id, ctypes.byref(dataSize))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoSamplingSize failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoSamplingSize failed (%s)' % self.getErrorString(ret))
         return dataSize.value
     
     #----- Clock -----
@@ -1946,7 +1948,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoClockType(self.Id, clockType)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoClockType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoClockType failed (%s)' % self.getErrorString(ret))
     
     def getAoClockType(self, clockType):
         """
@@ -1955,7 +1957,7 @@ class AIO(object):
         clockType = ctypes.c_short()
         ret = DLL.AioGetAoClockType(self.Id, ctypes.byref(clockType))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoClockType failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoClockType failed (%s)' % self.getErrorString(ret))
         return clockType.value
     
     def setAoSamplingClock(self, clock):
@@ -1964,7 +1966,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoSamplingClock(self.Id, clock)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoSamplingClock failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoSamplingClock failed (%s)' % self.getErrorString(ret))
     
     def getAoSamplingClock(self):
         """
@@ -1973,7 +1975,7 @@ class AIO(object):
         clock = ctypes.c_float()
         ret = DLL.AioGetAoSamplingClock(self.Id, ctypes.byref(clock))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoSamplingClock failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoSamplingClock failed (%s)' % self.getErrorString(ret))
         return clock.value
     
     def setAoClockEdge(self, edge):
@@ -1981,10 +1983,10 @@ class AIO(object):
         See document of AioSetAoClockEdge of API-USBP.
         """
         if not edge in [CONST_FALLING_EDGE, CONST_RISING_EDGE]:
-            raise ValueError, 'Edge must be CONST_FALLING_EDGE or CONST_RISING_EDGE.'
+            raise ValueError('Edge must be CONST_FALLING_EDGE or CONST_RISING_EDGE.')
         ret = DLL.AioSetAoClockEdge(self.Id, edge)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoClockEdge failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoClockEdge failed (%s)' % self.getErrorString(ret))
     
     def getAoClockEdge(self):
         """
@@ -1993,7 +1995,7 @@ class AIO(object):
         edge = ctypes.c_short()
         ret = DLL.AioGetAoClockEdge(self.Id, ctypes.byref(edge))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoClockEdge failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoClockEdge failed (%s)' % self.getErrorString(ret))
         return edge.value
     
     #----- Start trigger -----
@@ -2003,7 +2005,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoStartTrigger(self.Id, trigger)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoStartTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoStartTrigger failed (%s)' % self.getErrorString(ret))
     
     def getAoStartTrigger(self):
         """
@@ -2012,7 +2014,7 @@ class AIO(object):
         trigger = ctypes.c_short()
         ret = DLL.AioGetAoStartTrigger(self.Id, ctypes.byref(trigger))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoStartTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoStartTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
     
     #----- Stop trigger -----
@@ -2022,7 +2024,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoStopTrigger(self.Id, trigger)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoStopTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoStopTrigger failed (%s)' % self.getErrorString(ret))
     
     def getAoStopTrigger(self):
         """
@@ -2031,7 +2033,7 @@ class AIO(object):
         trigger = ctypes.c_short()
         ret = DLL.AioGetAoStopTrigger(self.Id, ctypes.byref(trigger))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoStopTrigger failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoStopTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
     
     #----- Repeat -----
@@ -2041,7 +2043,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoRepeatTimes(self.Id, repeatTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoRepeatTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoRepeatTimes failed (%s)' % self.getErrorString(ret))
     
     def getAoRepeatTimes(self):
         """
@@ -2050,7 +2052,7 @@ class AIO(object):
         repeatTimes = ctypes.c_short()
         ret = DLL.AioGetAoRepeatTimes(self.Id, ctypes.byref(repeatTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoRepeatTimes failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoRepeatTimes failed (%s)' % self.getErrorString(ret))
         return repeatTimes.value
     
     #----- Event -----
@@ -2066,7 +2068,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoEvent(self.Id, hWnd, event)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoEvent failed (%s)' % self.getErrorString(ret))
         
     def getAoEvent(self, hWnd):
         """
@@ -2080,7 +2082,7 @@ class AIO(object):
         event = ctypes.c_long()
         ret = DLL.AioGetAoEvent(self.Id, ctypes.byref(hWnd), ctypes.byref(event))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
         
     def setAoCallBackProc(self, callbackProc, event, param):
@@ -2097,7 +2099,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoCallBackProc(self.Id, callbackProc, event, param)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoCallBackProc Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoCallBackProc Failed (%s)' % self.getErrorString(ret))
     
     def setAoEventSamplingTimes(self, samplingTimes):
         """
@@ -2109,7 +2111,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoEventSamplingTimes(self.Id , samplingTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoEventSamplingTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoEventSamplingTimes Failed (%s)' % self.getErrorString(ret))
     
     def getAoEventSamplingTimes(self):
         """
@@ -2122,7 +2124,7 @@ class AIO(object):
         samplingTimes = ctypes.c_long()
         ret = DLL.AioGetAoEventSamplingTimes(self.Id , ctypes.byref(samplingTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoEventSamplingTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoEventSamplingTimes Failed (%s)' % self.getErrorString(ret))
     
     def setAoEventTransferTimes(self, transferTimes):
         """
@@ -2134,7 +2136,7 @@ class AIO(object):
         """
         ret = DLL.AioSetAoEventTransferTimes(self.Id , transferTimes)
         if ret != 0: #failed
-            raise ValueError, 'AioSetAoEventTransferTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetAoEventTransferTimes Failed (%s)' % self.getErrorString(ret))
     
     def getAoEventTransferTimes(self):
         """
@@ -2147,7 +2149,7 @@ class AIO(object):
         transferTimes = ctypes.c_long()
         ret = DLL.AioGetAoEventTransferTimes(self.Id , ctypes.byref(transferTimes))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoEventTransferTimes Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoEventTransferTimes Failed (%s)' % self.getErrorString(ret))
     
     #----- Start/Stop -----
     def startAo(self):
@@ -2157,7 +2159,7 @@ class AIO(object):
         """
         ret = DLL.AioStartAo(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioStartAo failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStartAo failed (%s)' % self.getErrorString(ret))
     
     def stopAo(self):
         """
@@ -2166,7 +2168,7 @@ class AIO(object):
         """
         ret = DLL.AioStopAo(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioStopAo failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStopAo failed (%s)' % self.getErrorString(ret))
     
     #----- States -----
     def getAoStatus(self):
@@ -2182,7 +2184,7 @@ class AIO(object):
         status = ctypes.c_long()
         ret = DLL.AioGetAoStatus(self.Id, ctypes.byref(status))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoStatus failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoStatus failed (%s)' % self.getErrorString(ret))
         return status.value
     
     def getAoSamplingCount(self):
@@ -2196,7 +2198,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAoSamplingCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoSamplingCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoSamplingCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     def getAoTransferCount(self):
@@ -2212,7 +2214,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAoTransferCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoTransferCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoTransferCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     def getAoRepeatCount(self):
@@ -2226,7 +2228,7 @@ class AIO(object):
         count = ctypes.c_long()
         ret = DLL.AioGetAoRepeatCount(self.Id, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetAoRepeatCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetAoRepeatCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     
@@ -2241,7 +2243,7 @@ class AIO(object):
         """
         ret = DLL.AioResetAoStatus(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioResetAoStatus failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetAoStatus failed (%s)' % self.getErrorString(ret))
     
     def resetAoMemory(self):
         """
@@ -2253,7 +2255,7 @@ class AIO(object):
         """
         ret = DLL.AioResetAoMemory(self.Id)
         if ret != 0: #failed
-            raise ValueError, 'AioResetAoMemory failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetAoMemory failed (%s)' % self.getErrorString(ret))
     
     
     #------------------------------------------------------------------------------------------
@@ -2272,7 +2274,7 @@ class AIO(object):
         data = ctypes.c_short()
         ret = DLL.AioInputDiBit(self.Id, bit, ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioInputDiBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioInputDiBit failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def inputDiByte(self, port):
@@ -2290,7 +2292,7 @@ class AIO(object):
         data = ctypes.c_short()
         ret = DLL.AioInputDiByte(self.Id, port, ctypes.byref(data))
         if ret != 0: #failed
-            raise ValueError, 'AioInputDiByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioInputDiByte failed (%s)' % self.getErrorString(ret))
         return data.value
     
     def setDiFilter(self, bit, value):
@@ -2305,7 +2307,7 @@ class AIO(object):
         """
         ret = DLL.AioSetDiFilter(self.Id, bit, value)
         if ret != 0: #failed
-            raise ValueError, 'AioSetDiFilter failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetDiFilter failed (%s)' % self.getErrorString(ret))
     
     def getDiFilter(self, bit):
         """
@@ -2320,7 +2322,7 @@ class AIO(object):
         value = ctypes.c_short()
         ret = DLL.AioGetDiFilter(self.Id, bit, ctypes.byref(value))
         if ret != 0: #failed
-            raise ValueError, 'AioGetDiFilter failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetDiFilter failed (%s)' % self.getErrorString(ret))
         return value.value
     
     
@@ -2339,7 +2341,7 @@ class AIO(object):
         """
         ret = DLL.AioOutputDoBit(self.Id, bit, data)
         if ret != 0: #failed
-            raise ValueError, 'AioOutputDoBit failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioOutputDoBit failed (%s)' % self.getErrorString(ret))
     
     def outputDoByte(self, port, data):
         """
@@ -2353,7 +2355,7 @@ class AIO(object):
         """
         ret = DLL.AioOutputDoByte(self.Id, port, data)
         if ret != 0: #failed
-            raise ValueError, 'AioOutputDoByte failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioOutputDoByte failed (%s)' % self.getErrorString(ret))
     
     
     #------------------------------------------------------------------------------------------
@@ -2370,7 +2372,7 @@ class AIO(object):
         """
         ret = DLL.AioSetDioDirection(self.Id, direction)
         if ret != 0: #failed
-            raise ValueError, 'AioSetDioDirection failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetDioDirection failed (%s)' % self.getErrorString(ret))
     
     def getDioDirection(self):
         """
@@ -2383,7 +2385,7 @@ class AIO(object):
         direction = ctypes.c_long()
         ret = DLL.AioGetDioDirection(self.Id, ctypes.byref(direction))
         if ret != 0: #failed
-            raise ValueError, 'AioGetDioDirection failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetDioDirection failed (%s)' % self.getErrorString(ret))
         return direction.value
     
     
@@ -2398,7 +2400,7 @@ class AIO(object):
         channels = ctypes.c_short()
         ret = DLL.AioGetCntMaxChannels(self.Id, ctypes.byref(channels))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntMaxChannels failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntMaxChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
     
     #----- Mode -----
@@ -2408,7 +2410,7 @@ class AIO(object):
         """
         ret = DLL.AioSetCntComparisonMode(self.Id, channel, mode)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntComparisonMode failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntComparisonMode failed (%s)' % self.getErrorString(ret))
     
     def getCntComparisonMode(self, channel):
         """
@@ -2417,7 +2419,7 @@ class AIO(object):
         mode = ctypes.c_short()
         ret = DLL.AioGetCntComparisonMode(self.Id, ctypes.byref(mode))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntComparisonMode failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntComparisonMode failed (%s)' % self.getErrorString(ret))
         return mode.value
     
     #----- Preset -----
@@ -2430,7 +2432,7 @@ class AIO(object):
             cPresetData[i] = presetData[i]
         ret = DLL.AioSetCntPresetReg(self.Id, channel, presetNumber, ctypes.byref(cPresetData), flag)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntPresetReg failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntPresetReg failed (%s)' % self.getErrorString(ret))
     
     #----- Comparison count -----
     def setCntComparisonReg(self, channel, presetNumber, comparisonData, flag):
@@ -2442,7 +2444,7 @@ class AIO(object):
             cComparisonData[i] = presetData[i]
         ret = DLL.AioSetCntComparisonReg(self.Id, channel, presetNumber, ctypes.byref(cComparisonData), flag)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntComparisonReg failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntComparisonReg failed (%s)' % self.getErrorString(ret))
     
     #----- Clock -----
     def setCntInputSignal(self, channel, inputSignal):
@@ -2451,7 +2453,7 @@ class AIO(object):
         """  
         ret = DLL.AioSetCntInputSignal(self.Id, channel, inputSignal)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntInputSignal failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntInputSignal failed (%s)' % self.getErrorString(ret))
     
     def getCntInputSignal(self):
         """
@@ -2460,7 +2462,7 @@ class AIO(object):
         inputSignal = ctypes.c_short()
         ret = DLL.AioGetCntInputSignal(self.Id, ctypes.byref(inputSignal))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntInputSignal failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntInputSignal failed (%s)' % self.getErrorString(ret))
         return inputSignal.value
     
     #----- Event -----
@@ -2470,7 +2472,7 @@ class AIO(object):
         """
         ret = DLL.AioSetCntEvent(self.Id, channel, hWnd, event)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntEvent failed (%s)' % self.getErrorString(ret))
     
     def getCntEvent(self, channel):
         """
@@ -2480,7 +2482,7 @@ class AIO(object):
         event = ctypes.c_long()
         ret = DLL.AioGetCntEvent(self.Id, channel, ctypes.byref(hWnd), ctypes.byref(event))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
     
     def setCntCallBackProc(self, channel, callbackProc, event, param):
@@ -2489,7 +2491,7 @@ class AIO(object):
         """
         ret = DLL.AioSetCntCallBackProc(self.Id, channel, callbackProc, event, param)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntCallBackProc Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntCallBackProc Failed (%s)' % self.getErrorString(ret))
     
     #----- Filter -----
     def setCntFilter(self, channel, signal, value):
@@ -2498,7 +2500,7 @@ class AIO(object):
         """
         ret = DLL.AioSetCntFilter(self.Id, channel, signal, value)
         if ret != 0: #failed
-            raise ValueError, 'AioSetCntFilter failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetCntFilter failed (%s)' % self.getErrorString(ret))
     
     def getCntFilter(self, channel, signal):
         """
@@ -2507,7 +2509,7 @@ class AIO(object):
         value = ctypes.c_short()
         ret = DLL.AioGetCntFilter(self.Id, channel, signal, ctypes.byref(value))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntFilter failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntFilter failed (%s)' % self.getErrorString(ret))
         return value.value
     
     #----- Start/Stop -----
@@ -2517,7 +2519,7 @@ class AIO(object):
         """
         ret = DLL.AioStartCnt(self.Id, channel)
         if ret != 0: #failed
-            raise ValueError, 'AioStartCnt failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStartCnt failed (%s)' % self.getErrorString(ret))
     
     def stopCnt(self, channel):
         """
@@ -2525,7 +2527,7 @@ class AIO(object):
         """
         ret = DLL.AioStopCnt(self.Id, channel)
         if ret != 0: #failed
-            raise ValueError, 'AioStopCnt failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStopCnt failed (%s)' % self.getErrorString(ret))
     
     def presetCnt(self, channel, presetData):
         """
@@ -2533,7 +2535,7 @@ class AIO(object):
         """
         ret = DLL.AioPresetCnt(self.Id, channel, presetData)
         if ret != 0: #failed
-            raise ValueError, 'AioPresetCnt failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioPresetCnt failed (%s)' % self.getErrorString(ret))
     
     #----- Status -----
     def getCntStatus(self, channel):
@@ -2543,7 +2545,7 @@ class AIO(object):
         status = ctypes.c_short()
         ret = DLL.AioGetCntStatus(self.Id, channel, ctypes.byref(status))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntStatus failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntStatus failed (%s)' % self.getErrorString(ret))
         return status.value
     
     def getCntCount(self, channel):
@@ -2553,7 +2555,7 @@ class AIO(object):
         count = ctypes.c_short()
         ret = DLL.AioGetCntCount(self.Id, channel, ctypes.byref(count))
         if ret != 0: #failed
-            raise ValueError, 'AioGetCntCount failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetCntCount failed (%s)' % self.getErrorString(ret))
         return count.value
     
     #----- Reset -----
@@ -2563,7 +2565,7 @@ class AIO(object):
         """
         ret = DLL.AioResetCntStatus(self.Id, channel, status)
         if ret != 0: #failed
-            raise ValueError, 'AioResetCntStatus failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioResetCntStatus failed (%s)' % self.getErrorString(ret))
     
     
     #------------------------------------------------------------------------------------------
@@ -2576,7 +2578,7 @@ class AIO(object):
         """
         ret = DLL.AioSetTmEvent(self.Id, timerId, hWnd, event)
         if ret != 0: #failed
-            raise ValueError, 'AioSetTmEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetTmEvent failed (%s)' % self.getErrorString(ret))
     
     def getTmEvent(self, timerId):
         """
@@ -2586,7 +2588,7 @@ class AIO(object):
         event = ctypes.c_long()
         ret = DLL.AioGetTmEvent(self.Id, timerId, ctypes.byref(hWnd), ctypes.byref(event))
         if ret != 0: #failed
-            raise ValueError, 'AioGetTmEvent failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetTmEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
     
     def setTmCallBackProc(self, timerId, callbackProc, event, param):
@@ -2595,7 +2597,7 @@ class AIO(object):
         """
         ret = DLL.AioSetTmCallBackProc(self.Id, timerId, callbackProc, event, param)
         if ret != 0: #failed
-            raise ValueError, 'AioSetTmCallBackProc Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetTmCallBackProc Failed (%s)' % self.getErrorString(ret))
     
     def stopTmTimer(self, timerId):
         """
@@ -2603,7 +2605,7 @@ class AIO(object):
         """
         ret = DLL.AioStopTmTimer( Id , TimerId )
         if ret != 0: #failed
-            raise ValueError, 'AioStopTmTimer Failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioStopTmTimer Failed (%s)' % self.getErrorString(ret))
     
     
     #------------------------------------------------------------------------------------------
@@ -2616,7 +2618,7 @@ class AIO(object):
         """
         ret = DLL.AioSetEcuSignal(self.Id, destination, source)
         if ret != 0: #failed
-            raise ValueError, 'AioSetEcuSignal failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioSetEcuSignal failed (%s)' % self.getErrorString(ret))
         
     def getEcuSignal(self, destination):
         """
@@ -2625,5 +2627,5 @@ class AIO(object):
         source = ctypes.c_short()
         ret = DLL.AioGetEcuSignal(self.Id, destination, ctypes.byref(source))
         if ret != 0: #failed
-            raise ValueError, 'AioGetEcuSignal failed (%s)' % self.getErrorString(ret)
+            raise ValueError('AioGetEcuSignal failed (%s)' % self.getErrorString(ret))
         return source.value
