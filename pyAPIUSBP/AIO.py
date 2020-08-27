@@ -12,218 +12,217 @@ except:
 #----------------------------------------------------------------------------------------------
 # External Signal
 #----------------------------------------------------------------------------------------------
-AIO_AIF_CLOCK				 = 0	#AI external clock
-AIO_AIF_START				 = 1	#AI external start trigger
-AIO_AIF_STOP				 = 2	#AI external stop trigger
-AIO_AOF_CLOCK				 = 3	#AO external clock
-AIO_AOF_START				 = 4	#AO external start trigger
-AIO_AOF_STOP				 = 5	#AO external stop trigger
-AIO_ALLF					 = -1	#ALL
+AIO_AIF_CLOCK               = 0    #AI external clock
+AIO_AIF_START               = 1    #AI external start trigger
+AIO_AIF_STOP                = 2    #AI external stop trigger
+AIO_AOF_CLOCK               = 3    #AO external clock
+AIO_AOF_START               = 4    #AO external start trigger
+AIO_AOF_STOP                = 5    #AO external stop trigger
+AIO_ALLF                    = -1    #ALL
 
 #----------------------------------------------------------------------------------------------
 # Analog IO range
 #----------------------------------------------------------------------------------------------
-PM10						 = 0	#-10 to 10V
-PM5							 = 1	#-5 to 5V
-PM25						 = 2	#-2.5 to 2.5V
-PM125						 = 3	#-1.25 to 1.25V
-PM1							 = 4	#-1 to 1V
-PM0625						 = 5	#-0.625 to 0.625V
-PM05						 = 6	#-0.5 to 0.5V
-PM03125						 = 7	#-0.3125 to 0.3125V
-PM025						 = 8	#-0.25 to 0.25V
-PM0125						 = 9	#-0.125 to 0.125V
-PM01						 = 10	#-0.1 to 0.1V
-PM005						 = 11	#-0.05 to 0.05V
-PM0025						 = 12	#-0.025 to 0.025V
-PM00125						 = 13	#-0.0125 to 0.0125V
-PM001						 = 14	#-0.01 to 0.01V
-P10							 = 50	#0 to 10V
-P5							 = 51	#0 to 5V
-P4095						 = 52	#0 to 4.095V
-P25							 = 53	#0 to 2.5V
-P125						 = 54	#0 to 1.25V
-P1							 = 55	#0 to 1V
-P05							 = 56	#0 to 0.5V
-P025						 = 57	#0 to 0.25V
-P01							 = 58	#0 to 0.1V
-P005						 = 59	#0 to 0.05V
-P0025						 = 60	#0 to 0.025V
-P00125						 = 61	#0 to 0.0125V
-P001						 = 62	#0 to 0.01V
-P20MA						 = 100	#0 to 20mA
-P4TO20MA					 = 101	#4 to 20mA
-P1TO5						 = 150	#1 to 5V
+PM10                        = 0    #-10 to 10V
+PM5                         = 1    #-5 to 5V
+PM25                        = 2    #-2.5 to 2.5V
+PM125                       = 3    #-1.25 to 1.25V
+PM1                         = 4    #-1 to 1V
+PM0625                      = 5    #-0.625 to 0.625V
+PM05                        = 6    #-0.5 to 0.5V
+PM03125                     = 7    #-0.3125 to 0.3125V
+PM025                       = 8    #-0.25 to 0.25V
+PM0125                      = 9    #-0.125 to 0.125V
+PM01                        = 10    #-0.1 to 0.1V
+PM005                       = 11    #-0.05 to 0.05V
+PM0025                      = 12    #-0.025 to 0.025V
+PM00125                     = 13    #-0.0125 to 0.0125V
+PM001                       = 14    #-0.01 to 0.01V
+P10                         = 50    #0 to 10V
+P5                          = 51    #0 to 5V
+P4095                       = 52    #0 to 4.095V
+P25                         = 53    #0 to 2.5V
+P125                        = 54    #0 to 1.25V
+P1                          = 55    #0 to 1V
+P05                         = 56    #0 to 0.5V
+P025                        = 57    #0 to 0.25V
+P01                         = 58    #0 to 0.1V
+P005                        = 59    #0 to 0.05V
+P0025                       = 60    #0 to 0.025V
+P00125                      = 61    #0 to 0.0125V
+P001                        = 62    #0 to 0.01V
+P20MA                       = 100    #0 to 20mA
+P4TO20MA                    = 101    #4 to 20mA
+P1TO5                       = 150    #1 to 5V
 
 #----------------------------------------------------------------------------------------------
 # AI event
 #----------------------------------------------------------------------------------------------
-AIE_START			 = 0x00000002
-AIE_RPTEND			 = 0x00000010
-AIE_END				 = 0x00000020
-AIE_DATA_NUM		 = 0x00000080
-AIE_DATA_TSF		 = 0x00000100
-AIE_OFERR			 = 0x00010000
-AIE_SCERR			 = 0x00020000
-AIE_ADERR			 = 0x00040000
+AIE_START                   = 0x00000002
+AIE_RPTEND                  = 0x00000010
+AIE_END                     = 0x00000020
+AIE_DATA_NUM                = 0x00000080
+AIE_DATA_TSF                = 0x00000100
+AIE_OFERR                   = 0x00010000
+AIE_SCERR                   = 0x00020000
+AIE_ADERR                   = 0x00040000
 
 #----------------------------------------------------------------------------------------------
 # AO event
 #----------------------------------------------------------------------------------------------
-AOE_START			 = 0x00000002
-AOE_RPTEND			 = 0x00000010
-AOE_END				 = 0x00000020
-AOE_DATA_NUM		 = 0x00000080
-AOE_DATA_TSF		 = 0x00000100
-AOE_SCERR			 = 0x00020000
-AOE_DAERR			 = 0x00040000
+AOE_START                   = 0x00000002
+AOE_RPTEND                  = 0x00000010
+AOE_END                     = 0x00000020
+AOE_DATA_NUM                = 0x00000080
+AOE_DATA_TSF                = 0x00000100
+AOE_SCERR                   = 0x00020000
+AOE_DAERR                   = 0x00040000
 
 #----------------------------------------------------------------------------------------------
 # Counter event
 #----------------------------------------------------------------------------------------------
-CNTE_DATA_NUM		 = 0x00000010
-CNTE_ORERR			 = 0x00010000
-CNTE_ERR			 = 0x00020000
+CNTE_DATA_NUM               = 0x00000010
+CNTE_ORERR                  = 0x00010000
+CNTE_ERR                    = 0x00020000
 
 #----------------------------------------------------------------------------------------------
 # Timer event
 #----------------------------------------------------------------------------------------------
-TME_INT				 = 0x00000001
-
+TME_INT                     = 0x00000001
 #----------------------------------------------------------------------------------------------
 # AI status
 #----------------------------------------------------------------------------------------------
-AIS_BUSY			 = 0x00000001
-AIS_START_TRG		 = 0x00000002
-AIS_DATA_NUM		 = 0x00000010
-AIS_OFERR			 = 0x00010000
-AIS_SCERR			 = 0x00020000
-AIS_AIERR			 = 0x00040000
-AIS_DRVERR			 = 0x00080000
+AIS_BUSY                    = 0x00000001
+AIS_START_TRG               = 0x00000002
+AIS_DATA_NUM                = 0x00000010
+AIS_OFERR                   = 0x00010000
+AIS_SCERR                   = 0x00020000
+AIS_AIERR                   = 0x00040000
+AIS_DRVERR                  = 0x00080000
 
 #----------------------------------------------------------------------------------------------
 # AO status
 #----------------------------------------------------------------------------------------------
-AOS_BUSY			 = 0x00000001
-AOS_START_TRG		 = 0x00000002
-AOS_DATA_NUM		 = 0x00000010
-AOS_SCERR			 = 0x00020000
-AOS_AOERR			 = 0x00040000
-AOS_DRVERR			 = 0x00080000
+AOS_BUSY                    = 0x00000001
+AOS_START_TRG               = 0x00000002
+AOS_DATA_NUM                = 0x00000010
+AOS_SCERR                   = 0x00020000
+AOS_AOERR                   = 0x00040000
+AOS_DRVERR                  = 0x00080000
 
 #----------------------------------------------------------------------------------------------
 # Counter status
 #----------------------------------------------------------------------------------------------
-CNTS_BUSY			 = 0x00000001
-CNTS_DATA_NUM		 = 0x00000010
-CNTS_ORERR			 = 0x00010000
-CNTS_ERR			 = 0x00020000
+CNTS_BUSY                   = 0x00000001
+CNTS_DATA_NUM               = 0x00000010
+CNTS_ORERR                  = 0x00010000
+CNTS_ERR                    = 0x00020000
 
 #----------------------------------------------------------------------------------------------
 # AI message
 #----------------------------------------------------------------------------------------------
-AIOM_AIE_START			 = 0x1000
-AIOM_AIE_RPTEND			 = 0x1001
-AIOM_AIE_END			 = 0x1002
-AIOM_AIE_DATA_NUM		 = 0x1003
-AIOM_AIE_DATA_TSF		 = 0x1007
-AIOM_AIE_OFERR			 = 0x1004
-AIOM_AIE_SCERR			 = 0x1005
-AIOM_AIE_ADERR			 = 0x1006
+AIOM_AIE_START              = 0x1000
+AIOM_AIE_RPTEND             = 0x1001
+AIOM_AIE_END                = 0x1002
+AIOM_AIE_DATA_NUM           = 0x1003
+AIOM_AIE_DATA_TSF           = 0x1007
+AIOM_AIE_OFERR              = 0x1004
+AIOM_AIE_SCERR              = 0x1005
+AIOM_AIE_ADERR              = 0x1006
 
 #----------------------------------------------------------------------------------------------
 # AO message
 #----------------------------------------------------------------------------------------------
-AIOM_AOE_START			 = 0x1020
-AIOM_AOE_RPTEND			 = 0x1021
-AIOM_AOE_END			 = 0x1022
-AIOM_AOE_DATA_NUM		 = 0x1023
-AIOM_AOE_DATA_TSF		 = 0x1027
-AIOM_AOE_SCERR			 = 0x1025
-AIOM_AOE_DAERR			 = 0x1026
+AIOM_AOE_START              = 0x1020
+AIOM_AOE_RPTEND             = 0x1021
+AIOM_AOE_END                = 0x1022
+AIOM_AOE_DATA_NUM           = 0x1023
+AIOM_AOE_DATA_TSF           = 0x1027
+AIOM_AOE_SCERR              = 0x1025
+AIOM_AOE_DAERR              = 0x1026
 
 #----------------------------------------------------------------------------------------------
 # Counter message
 #----------------------------------------------------------------------------------------------
-AIOM_CNTE_DATA_NUM		 = 0x1042
-AIOM_CNTE_ORERR			 = 0x1043
-AIOM_CNTE_ERR			 = 0x1044
+AIOM_CNTE_DATA_NUM          = 0x1042
+AIOM_CNTE_ORERR             = 0x1043
+AIOM_CNTE_ERR               = 0x1044
 
 #----------------------------------------------------------------------------------------------
 # Timer message
 #----------------------------------------------------------------------------------------------
-AIOM_TME_INT			 = 0x1060
+AIOM_TME_INT                = 0x1060
 
 #----------------------------------------------------------------------------------------------
 # AI additional data
 #----------------------------------------------------------------------------------------------
-AIAT_AI				 = 0x00000001
-AIAT_AO0			 = 0x00000100
-AIAT_DIO0			 = 0x00010000
-AIAT_CNT0			 = 0x01000000
-AIAT_CNT1			 = 0x02000000
+AIAT_AI                     = 0x00000001
+AIAT_AO0                    = 0x00000100
+AIAT_DIO0                   = 0x00010000
+AIAT_CNT0                   = 0x01000000
+AIAT_CNT1                   = 0x02000000
 
 #----------------------------------------------------------------------------------------------
 # Conter mode
 #----------------------------------------------------------------------------------------------
-CNT_LOADPRESET		 = 0x0000001
-CNT_LOADCOMP		 = 0x0000002
+CNT_LOADPRESET              = 0x0000001
+CNT_LOADCOMP                = 0x0000002
 
 #----------------------------------------------------------------------------------------------
 # Event controller signal
 #----------------------------------------------------------------------------------------------
-AIOECU_DEST_AI_CLK			 = 4
-AIOECU_DEST_AI_START		 = 0
-AIOECU_DEST_AI_STOP			 = 2
-AIOECU_DEST_AO_CLK			 = 36
-AIOECU_DEST_AO_START		 = 32
-AIOECU_DEST_AO_STOP			 = 34
-AIOECU_DEST_CNT0_UPCLK		 = 134
-AIOECU_DEST_CNT1_UPCLK		 = 135
-AIOECU_DEST_CNT0_START		 = 128
-AIOECU_DEST_CNT1_START		 = 129
-AIOECU_DEST_CNT0_STOP		 = 130
-AIOECU_DEST_CNT1_STOP		 = 131
-AIOECU_DEST_MASTER1			 = 104
-AIOECU_DEST_MASTER2			 = 105
-AIOECU_DEST_MASTER3			 = 106
+AIOECU_DEST_AI_CLK          = 4
+AIOECU_DEST_AI_START        = 0
+AIOECU_DEST_AI_STOP         = 2
+AIOECU_DEST_AO_CLK          = 36
+AIOECU_DEST_AO_START        = 32
+AIOECU_DEST_AO_STOP         = 34
+AIOECU_DEST_CNT0_UPCLK      = 134
+AIOECU_DEST_CNT1_UPCLK      = 135
+AIOECU_DEST_CNT0_START      = 128
+AIOECU_DEST_CNT1_START      = 129
+AIOECU_DEST_CNT0_STOP       = 130
+AIOECU_DEST_CNT1_STOP       = 131
+AIOECU_DEST_MASTER1         = 104
+AIOECU_DEST_MASTER2         = 105
+AIOECU_DEST_MASTER3         = 106
 
 #----------------------------------------------------------------------------------------------
 # Event controller origin
 #----------------------------------------------------------------------------------------------
-AIOECU_SRC_OPEN				 = -1
-AIOECU_SRC_AI_CLK			 = 4
-AIOECU_SRC_AI_EXTCLK		 = 146
-AIOECU_SRC_AI_TRGSTART		 = 144
-AIOECU_SRC_AI_LVSTART		 = 28
-AIOECU_SRC_AI_STOP			 = 17
-AIOECU_SRC_AI_STOP_DELAY	 = 18
-AIOECU_SRC_AI_LVSTOP		 = 29
-AIOECU_SRC_AI_TRGSTOP		 = 145
-AIOECU_SRC_AO_CLK			 = 66
-AIOECU_SRC_AO_EXTCLK		 = 149
-AIOECU_SRC_AO_TRGSTART		 = 147
-AIOECU_SRC_AO_STOP_FIFO		 = 352
-AIOECU_SRC_AO_STOP_RING		 = 80
-AIOECU_SRC_AO_TRGSTOP		 = 148
-AIOECU_SRC_CNT0_UPCLK		 = 150
-AIOECU_SRC_CNT1_UPCLK		 = 152
-AIOECU_SRC_CNT0_CMP			 = 288
-AIOECU_SRC_CNT1_CMP			 = 289
-AIOECU_SRC_SLAVE1			 = 136
-AIOECU_SRC_SLAVE2			 = 137
-AIOECU_SRC_SLAVE3			 = 138
-AIOECU_SRC_START			 = 384
-AIOECU_SRC_STOP				 = 385
+AIOECU_SRC_OPEN             = -1
+AIOECU_SRC_AI_CLK           = 4
+AIOECU_SRC_AI_EXTCLK        = 146
+AIOECU_SRC_AI_TRGSTART      = 144
+AIOECU_SRC_AI_LVSTART       = 28
+AIOECU_SRC_AI_STOP          = 17
+AIOECU_SRC_AI_STOP_DELAY    = 18
+AIOECU_SRC_AI_LVSTOP        = 29
+AIOECU_SRC_AI_TRGSTOP       = 145
+AIOECU_SRC_AO_CLK           = 66
+AIOECU_SRC_AO_EXTCLK        = 149
+AIOECU_SRC_AO_TRGSTART      = 147
+AIOECU_SRC_AO_STOP_FIFO     = 352
+AIOECU_SRC_AO_STOP_RING     = 80
+AIOECU_SRC_AO_TRGSTOP       = 148
+AIOECU_SRC_CNT0_UPCLK       = 150
+AIOECU_SRC_CNT1_UPCLK       = 152
+AIOECU_SRC_CNT0_CMP         = 288
+AIOECU_SRC_CNT1_CMP         = 289
+AIOECU_SRC_SLAVE1           = 136
+AIOECU_SRC_SLAVE2           = 137
+AIOECU_SRC_SLAVE3           = 138
+AIOECU_SRC_START            = 384
+AIOECU_SRC_STOP             = 385
 
 #----------------------------------------------------------------------------------------------
 # Counter message for M-device 
 #----------------------------------------------------------------------------------------------
-AIOM_CNTM_COUNTUP_CH0		 = 0x1070
-AIOM_CNTM_COUNTUP_CH1		 = 0x1071
-AIOM_CNTM_TIME_UP			 = 0x1090
-AIOM_CNTM_COUNTER_ERROR		 = 0x1091
-AIOM_CNTM_CARRY_BORROW		 = 0x1092
+AIOM_CNTM_COUNTUP_CH0         = 0x1070
+AIOM_CNTM_COUNTUP_CH1         = 0x1071
+AIOM_CNTM_TIME_UP             = 0x1090
+AIOM_CNTM_COUNTER_ERROR         = 0x1091
+AIOM_CNTM_CARRY_BORROW         = 0x1092
 
 CONST_FIFO = 0
 CONST_RING = 1
