@@ -1082,7 +1082,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartInRange(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStartInRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartInRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1094,7 +1094,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartInRangeEx(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStartInRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartInRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1122,7 +1122,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartOutRange(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStartOutRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1134,7 +1134,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartOutRangeEx(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStartOutRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1241,7 +1241,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopInRange(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStopInRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopInRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1253,7 +1253,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopInRangeEx(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStopInRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopInRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1281,7 +1281,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopOutRange(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStopOutRange(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1293,7 +1293,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopOutRangeEx(self.Id, channel, level1, level1, stateTimes)
+        ret = DLL.AioGetAiStopOutRangeEx(self.Id, channel, level1, level2, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
