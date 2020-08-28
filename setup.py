@@ -3,15 +3,15 @@ from setuptools import setup, find_packages
 import sys
 import os
 
-from pyAPIUSBP import __version__
+from pyapiusbp import __version__
 
 version = __version__
 
-setup(name='pyAPIUSBP',
+setup(name='pyapiusbp',
       version=version,
       description='Using Contec API-USBP functions from Python',
       long_description="""
-pyAPIUSBP is a module for using Contec API-USBP functions 
+pyapiusbp is a module for using Contec API-USBP functions 
 (http://www.contec.co.jp/product/device/apiusbp/) from Python.
 
 Disclaimer: pyAPIUSBP is unofficial. It is NOT affiliated with Contec
@@ -32,6 +32,6 @@ in any way.
       author_email='hsogo@ehime-u.ac.jp',
       url='http://sourceforge.net/p/pyapiusbp/',
       license='GNU GPL',
-      packages=['pyAPIUSBP'],
-      package_data={'pyAPIUSBP': ['LICENSE.txt']},
+      packages=['pyapiusbp'],
+      package_data={'pyapiusbp': ['LICENSE.txt']},
       )
