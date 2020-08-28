@@ -444,7 +444,7 @@ def queryAioDeviceName():
     deviceName = (ctypes.c_char*256)()
     device = (ctypes.c_char*256)()
     for i in range(255):
-        ret = DLL.AioQueryDeviceName(i, ctypes.byref(deviceName), ctypes.byref(device))
+        ret = DLL.AioQueryDeviceName(i, deviceName, device)
         if ret == 0: #success
             devlist.append([deviceName.value, device.value])
         else:
@@ -462,10 +462,10 @@ def getAioDeviceType(device):
         Device type.
     """
     deviceType = ctypes.c_short()
-    ret = DLL.AioGetDeviceType(device, ctypes.byref(deviceType))
+    ret = DLL.AioGetDeviceType(device, deviceType)
     if ret != 0: #failed
         msg = (ctypes.c_char*256)()
-        DLL.AioGetErrorString(ret,ctypes.byref(msg))
+        DLL.AioGetErrorString(ret, msg)
         raise ValueError('AioGetDeviceType failed (%s)' % msg.value)
     if deviceType.value == 1:
         return 'PCI'
@@ -563,7 +563,7 @@ class AIO(object):
         """
         self.Id = None
         cId = ctypes.c_short()
-        ret = DLL.AioInit(deviceName, ctypes.byref(cId))
+        ret = DLL.AioInit(deviceName, cId)
         if ret != 0: #failed
             raise ValueError('AioInit failed (%s)' % self.getErrorString(ret))
         self.Id = cId.value
@@ -588,7 +588,7 @@ class AIO(object):
             Error code of Contec API-USBP AIO functions.
         """
         msg = (ctypes.c_char*256)()
-        DLL.AioGetErrorString(ret,ctypes.byref(msg))
+        DLL.AioGetErrorString(ret, msg)
         return msg.value
     
     def _resetProcess(self):
@@ -639,7 +639,7 @@ class AIO(object):
         if not signal in CONST_AIO_EXTERNAL_SIGNALS:
             raise ValueError('Invalid signal')
         value = ctypes.c_flaot()
-        ret = DLL.AioGetControlFilter(self.Id, signal, ctypes.byref(value))
+        ret = DLL.AioGetControlFilter(self.Id, signal, value)
         if ret != 0: #failed
             raise ValueError('AioGetControlFilter failed (%s)' % self.getErrorString(ret))
         return value.value
@@ -658,7 +658,7 @@ class AIO(object):
             Value (range depends on the device).
         """
         data = ctypes.c_ulong()
-        ret = DLL.AioSingleAi(self.Id, channel, ctypes.byref(data))
+        ret = DLL.AioSingleAi(self.Id, channel, data)
         if ret != 0: #failed
             raise ValueError('AioSingleAi failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -674,7 +674,7 @@ class AIO(object):
             Value (range depends on the device).
         """
         data = ctypes.c_float()
-        ret = DLL.AioSingleAiEx(self.Id, channel, ctypes.byref(data))
+        ret = DLL.AioSingleAiEx(self.Id, channel, data)
         if ret != 0: #failed
             raise ValueError('AioSingleAi failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -690,7 +690,7 @@ class AIO(object):
         """
         nch = len(channelList)
         data = (ctypes.c_long*nch)()
-        ret = DLL.AioMultiAi(self.Id, nch, ctypes.byref(data))
+        ret = DLL.AioMultiAi(self.Id, nch, data)
         if ret != 0: #failed
             raise ValueError('AioMultiAi failed (%s)' % self.getErrorString(ret))
         return list(data)
@@ -707,7 +707,7 @@ class AIO(object):
         """
         nch = len(channelList)
         data = (ctypes.c_long*nch)()
-        ret = DLL.AioMultiAiEx(self.Id, nch, ctypes.byref(data))
+        ret = DLL.AioMultiAiEx(self.Id, nch, data)
         if ret != 0: #failed
             raise ValueError('AioMultiAiEx failed (%s)' % self.getErrorString(ret))
         return list(data)
@@ -722,7 +722,7 @@ class AIO(object):
             16 for 16bit resolution.
         """
         resolution = ctypes.c_short()
-        ret = DLL.AioGetAiResolution(self.Id, ctypes.byref(resolution))
+        ret = DLL.AioGetAiResolution(self.Id, resolution)
         if ret != 0: #failed
             raise ValueError('AioGetAiResolution failed (%s)' % self.getErrorString(ret))
         
@@ -748,7 +748,7 @@ class AIO(object):
             0 for single-ended, 1 for differential.
         """
         method = ctypes.c_short()
-        ret = DLL.AioGetAiInputMethod(self.Id, ctypes.byref(method))
+        ret = DLL.AioGetAiInputMethod(self.Id, method)
         if ret != 0: #failed
             raise ValueError('AioGetAiInputMethod failed (%s)' % self.getErrorString(ret))
         return method.value
@@ -762,7 +762,7 @@ class AIO(object):
             Maximum number of analog input channels.
         """
         channels = ctypes.c_short()
-        ret = DLL.AioGetAiMaxChannels(self.Id, ctypes.byref(channels))
+        ret = DLL.AioGetAiMaxChannels(self.Id, channels)
         if ret != 0: #failed
             raise ValueError('AioSetAiMaxChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
@@ -787,7 +787,7 @@ class AIO(object):
             Number of channels.
         """
         channels = ctypes.c_short()
-        ret = DLL.AioGetAiChannels(self.Id, ctypes.byref(channels))
+        ret = DLL.AioGetAiChannels(self.Id, channels)
         if ret != 0: #failed
             raise ValueError('AioSetAiChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
@@ -817,7 +817,7 @@ class AIO(object):
             See document of AioGwetAiChannelSequence of API-USBP.
         """
         channel = ctypes.c_short()
-        ret = DLL.AioGetAiChannelSequence(self.Id, sequence, ctypes.byref(channel))
+        ret = DLL.AioGetAiChannelSequence(self.Id, sequence, channel)
         if ret != 0: #failed
             raise ValueError('AioGetAiChannelSequence failed (%s)' % self.getErrorString(ret))
         return channel.value
@@ -860,7 +860,7 @@ class AIO(object):
             range string from range IO.
         """
         AiRange = ctypes.c_short()
-        ret = DLL.AioGetAiChannels(self.Id, ctypes.byref(AiRange))
+        ret = DLL.AioGetAiChannels(self.Id, AiRange)
         if ret != 0: #failed
             raise ValueError('AioSetAiRange failed (%s)' % self.getErrorString(ret))
         return AiRange.value
@@ -889,7 +889,7 @@ class AIO(object):
             pyAPIUSBP.AIO.CONST_USER_BUFFER for user-buffer-mode.
         """
         mode = ctypes.c_short()
-        ret = DLL.AioGetAiTransferMode(self.Id, ctypes.byref(mode))
+        ret = DLL.AioGetAiTransferMode(self.Id, mode)
         if ret != 0: #failed
             raise ValueError('AioGetAiTransferMode failed (%s)' % self.getErrorString(ret))
         return mode.value
@@ -918,7 +918,7 @@ class AIO(object):
             See document of AioGetAiMemoryType of API-USBP.
         """
         memType = ctypes.c_short()
-        ret = DLL.AioGetAiMemoryType(self.Id, ctypes.byref(memType))
+        ret = DLL.AioGetAiMemoryType(self.Id, memType)
         if ret != 0: #failed
             raise ValueError('AioGetAiMemoryType failed (%s)' % self.getErrorString(ret))
         return memType.value
@@ -937,7 +937,7 @@ class AIO(object):
         See document of AioGetAiClockType of API-USBP.
         """
         clockType = ctypes.c_short()
-        ret = DLL.AioGetAiClockType(self.Id, ctypes.byref(clockType))
+        ret = DLL.AioGetAiClockType(self.Id, clockType)
         if ret != 0: #failed
             raise ValueError('AioGetAiClockType failed (%s)' % self.getErrorString(ret))
         return clockType.value
@@ -955,7 +955,7 @@ class AIO(object):
         See document of AioGetAiScanClock of API-USBP.
         """
         clock = ctypes.c_float()
-        ret = DLL.AioGetAiScanClock(self.Id, ctypes.byref(clock))
+        ret = DLL.AioGetAiScanClock(self.Id, clock)
         if ret != 0: #failed
             raise ValueError('AioGetAiScanClock failed (%s)' % self.getErrorString(ret))
         return clock.value
@@ -973,7 +973,7 @@ class AIO(object):
         See document of AioGetAiSamplingClock of API-USBP.
         """
         clock = ctypes.c_float()
-        ret = DLL.AioGetAiSamplingClock(self.Id, ctypes.byref(clock))
+        ret = DLL.AioGetAiSamplingClock(self.Id, clock)
         if ret != 0: #failed
             raise ValueError('AioGetAiSamplingClock failed (%s)' % self.getErrorString(ret))
         return clock.value
@@ -993,7 +993,7 @@ class AIO(object):
         See document of AioGetAiClockEdge of API-USBP.
         """
         edge = ctypes.c_short()
-        ret = DLL.AioGetAiClockEdge(self.Id, ctypes.byref(edge))
+        ret = DLL.AioGetAiClockEdge(self.Id, edge)
         if ret != 0: #failed
             raise ValueError('AioGetAiClockEdge failed (%s)' % self.getErrorString(ret))
         return edge.value
@@ -1012,7 +1012,7 @@ class AIO(object):
         See document of AioGetAiStartTrigger of API-USBP.
         """
         trigger = ctypes.c_short()
-        ret = DLL.AioGetAiStartTrigger(self.Id, ctypes.byref(trigger))
+        ret = DLL.AioGetAiStartTrigger(self.Id, trigger)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
@@ -1043,7 +1043,7 @@ class AIO(object):
         """
         level = ctypes.c_long()
         direction = ctypes.c_short()
-        ret = DLL.AioGetAiStartLevel(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
+        ret = DLL.AioGetAiStartLevel(self.Id, channel, level, direction)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartLevel failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1054,7 +1054,7 @@ class AIO(object):
         """
         level = ctypes.c_float()
         direction = ctypes.c_short()
-        ret = DLL.AioGetAiStartLevelEx(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
+        ret = DLL.AioGetAiStartLevelEx(self.Id, channel, level, direction)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartLevelEx failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1082,7 +1082,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartInRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStartInRange(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartInRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1094,7 +1094,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartInRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStartInRangeEx(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartInRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1122,7 +1122,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartOutRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStartOutRange(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1134,7 +1134,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStartOutRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStartOutRangeEx(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStartOutRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1153,7 +1153,7 @@ class AIO(object):
         See document of AioGetAiStopTrigger of API-USBP.
         """
         trigger = ctypes.c_short()
-        ret = DLL.AioGetAiStopTrigger(self.Id, ctypes.byref(trigger))
+        ret = DLL.AioGetAiStopTrigger(self.Id, trigger)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
@@ -1171,7 +1171,7 @@ class AIO(object):
         See document of AioGetAiStopTimes of API-USBP.
         """
         stopTimes = ctypes.c_long()
-        ret = DLL.AioGetAiStopTimes(self.Id, ctypes.byref(stopTimes))
+        ret = DLL.AioGetAiStopTimes(self.Id, stopTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopTimes failed (%s)' % self.getErrorString(ret))
         return stopTimes.value
@@ -1202,7 +1202,7 @@ class AIO(object):
         """
         level = ctypes.c_long()
         direction = ctypes.c_short()
-        ret = DLL.AioGetAiStopLevel(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
+        ret = DLL.AioGetAiStopLevel(self.Id, channel, level, direction)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopLevel failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1213,7 +1213,7 @@ class AIO(object):
         """
         level = ctypes.c_float()
         direction = ctypes.c_short()
-        ret = DLL.AioGetAiStopLevelEx(self.Id, channel, ctypes.byref(level), ctypes.byref(direction))
+        ret = DLL.AioGetAiStopLevelEx(self.Id, channel, level, direction)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopLevelEx failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1241,7 +1241,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopInRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStopInRange(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopInRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1253,7 +1253,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopInRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStopInRangeEx(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopInRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1281,7 +1281,7 @@ class AIO(object):
         level1 = ctypes.c_long()
         level2 = ctypes.c_long()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopOutRange(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStopOutRange(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret))
         return (level1.value, level2.value, stateTimes.value)
@@ -1293,7 +1293,7 @@ class AIO(object):
         level1 = ctypes.c_float()
         level2 = ctypes.c_float()
         stateTimes = ctypes.c_short()
-        ret = DLL.AioGetAiStopOutRangeEx(self.Id, channel, ctypes.byref(level1), ctypes.byref(level1), ctypes.byref(stateTimes))
+        ret = DLL.AioGetAiStopOutRangeEx(self.Id, channel, level1, level1, stateTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopOutRange failed (%s)' % self.getErrorString(ret))
         return (level.value, direction.value)
@@ -1312,7 +1312,7 @@ class AIO(object):
         See document of AioSetAiStopDelayTimes of API-USBP.
         """
         delayTimes = ctypes.c_long()
-        ret = DLL.AioSetAiStopDelayTimes(self.Id, ctypes.byref(delayTimes))
+        ret = DLL.AioSetAiStopDelayTimes(self.Id, delayTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopDelayTimes failed (%s)' % self.getErrorString(ret))
         return delayTimes.value
@@ -1331,7 +1331,7 @@ class AIO(object):
         See document of AioGetAiRepeatTimes of API-USBP.
         """
         repeatTimes = ctypes.c_long()
-        ret = DLL.AioGetAiRepeatTimes(self.Id, ctypes.byref(repeatTimes))
+        ret = DLL.AioGetAiRepeatTimes(self.Id, repeatTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiRepeatTimes failed (%s)' % self.getErrorString(ret))
         return repeatTimes.value
@@ -1361,7 +1361,7 @@ class AIO(object):
         """
         hWnd = ctypes.c_int()
         event = ctypes.c_long()
-        ret = DLL.AioGetAiEvent(self.Id, ctypes.byref(hWnd), ctypes.byref(event))
+        ret = DLL.AioGetAiEvent(self.Id, hWnd, event)
         if ret != 0: #failed
             raise ValueError('AioGetAiEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
@@ -1403,7 +1403,7 @@ class AIO(object):
             See document of AioGetAiEventSamplingTimes of API-USBP.
         """
         samplingTimes = ctypes.c_long()
-        ret = DLL.AioGetAiEventSamplingTimes(self.Id , ctypes.byref(samplingTimes))
+        ret = DLL.AioGetAiEventSamplingTimes(self.Id , samplingTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiEventSamplingTimes Failed (%s)' % self.getErrorString(ret))
     
@@ -1428,7 +1428,7 @@ class AIO(object):
             See document of AioGetAiEventTransferTimes of API-USBP.
         """
         transferTimes = ctypes.c_long()
-        ret = DLL.AioGetAiEventTransferTimes(self.Id , ctypes.byref(transferTimes))
+        ret = DLL.AioGetAiEventTransferTimes(self.Id , transferTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAiEventTransferTimes Failed (%s)' % self.getErrorString(ret))
     
@@ -1475,7 +1475,7 @@ class AIO(object):
             See document of AioGetAiStatus of API-USBP.
         """
         status = ctypes.c_long()
-        ret = DLL.AioGetAiStatus(self.Id, ctypes.byref(status))
+        ret = DLL.AioGetAiStatus(self.Id, status)
         if ret != 0: #failed
             raise ValueError('AioGetAiStatus failed (%s)' % self.getErrorString(ret))
         return status.value
@@ -1491,7 +1491,7 @@ class AIO(object):
             See document of AioGetAiSamplingCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAiSamplingCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAiSamplingCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAiSamplingCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -1507,7 +1507,7 @@ class AIO(object):
             See document of AioGetAiStopTriggerCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAiStopTriggerCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAiStopTriggerCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopTriggerCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -1523,7 +1523,7 @@ class AIO(object):
             See document of AioGetAiTransferCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAiTransferCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAiTransferCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAiTransferCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -1539,7 +1539,7 @@ class AIO(object):
             See document of AioGetAiTransferLap of API-USBP.
         """
         lap = ctypes.c_long()
-        ret = DLL.AioGetAiTransferLap(self.Id, ctypes.byref(lap))
+        ret = DLL.AioGetAiTransferLap(self.Id, lap)
         if ret != 0: #failed
             raise ValueError('AioGetAiTransferLap failed (%s)' % self.getErrorString(ret))
         return lap.value
@@ -1555,7 +1555,7 @@ class AIO(object):
             See document of AioGetAiStopTriggerTransferCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAiStopTriggerTransferCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAiStopTriggerTransferCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAiStopTriggerTransferCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -1569,7 +1569,7 @@ class AIO(object):
             See document of AioGetAiRepeatCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAiRepeatCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAiRepeatCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAiRepeatCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -1589,7 +1589,7 @@ class AIO(object):
         """
         cSamplingTimes = ctypes.c_long(samplingTimes)
         data = (ctypes.c_long*samplingTimes)()
-        ret = DLL.AioGetAiSamplingData(self.Id, ctypes.byref(cSamplingTimes), ctypes.byref(data))
+        ret = DLL.AioGetAiSamplingData(self.Id, cSamplingTimes, data)
         if ret != 0: #failed
             raise ValueError('AioGetAiSamplingTimes failed (%s)' % self.getErrorString(ret))
         return (cSamplingTimes.value, list(data))
@@ -1608,7 +1608,7 @@ class AIO(object):
         """
         cSamplingTimes = ctypes.c_long(samplingTimes)
         data = (ctypes.c_float*samplingTimes)()
-        ret = DLL.AioGetAiSamplingDataEx(self.Id, ctypes.byref(cSamplingTimes), ctypes.byref(data))
+        ret = DLL.AioGetAiSamplingDataEx(self.Id, cSamplingTimes, data)
         if ret != 0: #failed
             raise ValueError('AioGetAiSamplingTimesEx failed (%s)' % self.getErrorString(ret))
         return (cSamplingTimes.value, list(data))
@@ -1684,7 +1684,7 @@ class AIO(object):
         cData = (ctpyes.c_long*channels)()
         for i in range(channels):
             cData[i] = data[i]
-        ret = DLL.AioMultiAo(self.Id, channel, ctypes.byref(cData))
+        ret = DLL.AioMultiAo(self.Id, channel, cData)
         if ret != 0: #failed
             raise ValueError('AioMultiAo failed (%s)' % self.getErrorString(ret))
     
@@ -1701,7 +1701,7 @@ class AIO(object):
         cData = (ctpyes.c_float*channels)()
         for i in range(channels):
             cData[i] = data[i]
-        ret = DLL.AioMultiAoEx(self.Id, channel, ctypes.byref(cData))
+        ret = DLL.AioMultiAoEx(self.Id, channel, cData)
         if ret != 0: #failed
             raise ValueError('AioMultiAoEx failed (%s)' % self.getErrorString(ret))
     
@@ -1715,7 +1715,7 @@ class AIO(object):
             16 for 16bit resolution.
         """
         resolution = ctpyes.c_short()
-        ret = DLL.AioGetAoResolution(self.Id, ctypes.byref(resolution))
+        ret = DLL.AioGetAoResolution(self.Id, resolution)
         if ret != 0: #failed
             raise ValueError('AioGetAoResolution failed (%s)' % self.getErrorString(ret))
         return resolution.value
@@ -1741,7 +1741,7 @@ class AIO(object):
             Number of channels.
         """
         channels = ctypes.c_short()
-        ret = DLL.AioGetAoChannels(self.Id, ctypes.byref(channels))
+        ret = DLL.AioGetAoChannels(self.Id, channels)
         if ret != 0: #failed
             raise ValueError('AioGetAoChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
@@ -1754,7 +1754,7 @@ class AIO(object):
             Maximum number of analog output channels.
         """
         channels = ctypes.c_short()
-        ret = DLL.AioGetAoMaxChannels(self.Id, ctypes.byref(channels))
+        ret = DLL.AioGetAoMaxChannels(self.Id, channels)
         if ret != 0: #failed
             raise ValueError('AioGetAoMaxChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
@@ -1797,7 +1797,7 @@ class AIO(object):
             range string from range IO.
         """
         range = ctypes.c_short()
-        ret = DLL.AioGetAoRange(self.Id, ctypes.byref(range))
+        ret = DLL.AioGetAoRange(self.Id, range)
         if ret != 0: #failed
             raise ValueError('AioGetAoRange failed (%s)' % self.getErrorString(ret))
         return range.value
@@ -1826,7 +1826,7 @@ class AIO(object):
             pyAPIUSBP.AIO.CONST_USER_BUFFER for user-buffer-mode.
         """
         mode = ctypes.c_short()
-        ret = DLL.AioGetAoTransferMode(self.Id, ctypes.byref(mode))
+        ret = DLL.AioGetAoTransferMode(self.Id, mode)
         if ret != 0: #failed
             raise ValueError('AioGetAoTransferMode failed (%s)' % self.getErrorString(ret))
         return mode.value
@@ -1855,7 +1855,7 @@ class AIO(object):
             See document of AioGetAoMemoryType of API-USBP.
         """
         memType = ctypes.c_short()
-        ret = DLL.AioGetAoMemoryType(self.Id, ctypes.byref(memType))
+        ret = DLL.AioGetAoMemoryType(self.Id, memType)
         if ret != 0: #failed
             raise ValueError('AioGetAoMemoryType failed (%s)' % self.getErrorString(ret))
         return memType.value
@@ -1874,7 +1874,7 @@ class AIO(object):
         cData = (ctypes.c_long*samplingTimes)()
         for i in range(samplingTimes):
             cData[i] = data[i]
-        ret = DLL.AioSetAoSamplingData(self.Id, samplingTimes, ctypes.byref(cData))
+        ret = DLL.AioSetAoSamplingData(self.Id, samplingTimes, cData)
         if ret != 0: #failed
             raise ValueError('AioSetAoSamplingData failed (%s)' % self.getErrorString(ret))
     
@@ -1891,7 +1891,7 @@ class AIO(object):
         cData = (ctypes.c_float*samplingTimes)()
         for i in range(samplingTimes):
             cData[i] = data[i]
-        ret = DLL.AioSetAoSamplingDataEx(self.Id, samplingTimes, ctypes.byref(cData))
+        ret = DLL.AioSetAoSamplingDataEx(self.Id, samplingTimes, cData)
         if ret != 0: #failed
             raise ValueError('AioSetAoSamplingDataEx failed (%s)' % self.getErrorString(ret))
     
@@ -1904,7 +1904,7 @@ class AIO(object):
             See document of AioGetAoSamplingTimes of API-USBP.
         """
         samplingTimes = ctypes.c_long()
-        ret = DLL.AioGetAoSamplingTimes(self.Id, ctypes.byref(samplingTimes))
+        ret = DLL.AioGetAoSamplingTimes(self.Id, samplingTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAoSamplingTimes failed (%s)' % self.getErrorString(ret))
         return samplingTimes.value
@@ -1935,7 +1935,7 @@ class AIO(object):
             See document of AioGetAoSamplingDataSize of API-USBP.
         """
         dataSize = ctypes.c_short()
-        ret = DLL.AioGetAoSamplingDataSize(self.Id, ctypes.byref(dataSize))
+        ret = DLL.AioGetAoSamplingDataSize(self.Id, dataSize)
         if ret != 0: #failed
             raise ValueError('AioGetAoSamplingSize failed (%s)' % self.getErrorString(ret))
         return dataSize.value
@@ -1954,7 +1954,7 @@ class AIO(object):
         See document of AioGetAoClockType of API-USBP.
         """
         clockType = ctypes.c_short()
-        ret = DLL.AioGetAoClockType(self.Id, ctypes.byref(clockType))
+        ret = DLL.AioGetAoClockType(self.Id, clockType)
         if ret != 0: #failed
             raise ValueError('AioGetAoClockType failed (%s)' % self.getErrorString(ret))
         return clockType.value
@@ -1972,7 +1972,7 @@ class AIO(object):
         See document of AioGetAoSamplingClock of API-USBP.
         """
         clock = ctypes.c_float()
-        ret = DLL.AioGetAoSamplingClock(self.Id, ctypes.byref(clock))
+        ret = DLL.AioGetAoSamplingClock(self.Id, clock)
         if ret != 0: #failed
             raise ValueError('AioGetAoSamplingClock failed (%s)' % self.getErrorString(ret))
         return clock.value
@@ -1992,7 +1992,7 @@ class AIO(object):
         See document of AioGetAoClockEdge of API-USBP.
         """
         edge = ctypes.c_short()
-        ret = DLL.AioGetAoClockEdge(self.Id, ctypes.byref(edge))
+        ret = DLL.AioGetAoClockEdge(self.Id, edge)
         if ret != 0: #failed
             raise ValueError('AioGetAoClockEdge failed (%s)' % self.getErrorString(ret))
         return edge.value
@@ -2011,7 +2011,7 @@ class AIO(object):
         See document of AioGetAoStartTrigger of API-USBP.
         """
         trigger = ctypes.c_short()
-        ret = DLL.AioGetAoStartTrigger(self.Id, ctypes.byref(trigger))
+        ret = DLL.AioGetAoStartTrigger(self.Id, trigger)
         if ret != 0: #failed
             raise ValueError('AioGetAoStartTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
@@ -2030,7 +2030,7 @@ class AIO(object):
         See document of AioGetAoStopTrigger of API-USBP.
         """
         trigger = ctypes.c_short()
-        ret = DLL.AioGetAoStopTrigger(self.Id, ctypes.byref(trigger))
+        ret = DLL.AioGetAoStopTrigger(self.Id, trigger)
         if ret != 0: #failed
             raise ValueError('AioGetAoStopTrigger failed (%s)' % self.getErrorString(ret))
         return trigger.value
@@ -2049,7 +2049,7 @@ class AIO(object):
         See document of AioGetAoRepeatTimes of API-USBP.
         """
         repeatTimes = ctypes.c_short()
-        ret = DLL.AioGetAoRepeatTimes(self.Id, ctypes.byref(repeatTimes))
+        ret = DLL.AioGetAoRepeatTimes(self.Id, repeatTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAoRepeatTimes failed (%s)' % self.getErrorString(ret))
         return repeatTimes.value
@@ -2079,7 +2079,7 @@ class AIO(object):
         """
         hWnd = ctypes.c_int()
         event = ctypes.c_long()
-        ret = DLL.AioGetAoEvent(self.Id, ctypes.byref(hWnd), ctypes.byref(event))
+        ret = DLL.AioGetAoEvent(self.Id, hWnd, event)
         if ret != 0: #failed
             raise ValueError('AioGetAoEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
@@ -2121,7 +2121,7 @@ class AIO(object):
             See document of AioGetAoEventSamplingTimes of API-USBP.
         """
         samplingTimes = ctypes.c_long()
-        ret = DLL.AioGetAoEventSamplingTimes(self.Id , ctypes.byref(samplingTimes))
+        ret = DLL.AioGetAoEventSamplingTimes(self.Id , samplingTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAoEventSamplingTimes Failed (%s)' % self.getErrorString(ret))
     
@@ -2146,7 +2146,7 @@ class AIO(object):
             See document of AioGetAoEventTransferTimes of API-USBP.
         """
         transferTimes = ctypes.c_long()
-        ret = DLL.AioGetAoEventTransferTimes(self.Id , ctypes.byref(transferTimes))
+        ret = DLL.AioGetAoEventTransferTimes(self.Id , transferTimes)
         if ret != 0: #failed
             raise ValueError('AioGetAoEventTransferTimes Failed (%s)' % self.getErrorString(ret))
     
@@ -2181,7 +2181,7 @@ class AIO(object):
             See document of AioGetAoStatus of API-USBP.
         """
         status = ctypes.c_long()
-        ret = DLL.AioGetAoStatus(self.Id, ctypes.byref(status))
+        ret = DLL.AioGetAoStatus(self.Id, status)
         if ret != 0: #failed
             raise ValueError('AioGetAoStatus failed (%s)' % self.getErrorString(ret))
         return status.value
@@ -2195,7 +2195,7 @@ class AIO(object):
             See document of AioGetAoSamplingCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAoSamplingCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAoSamplingCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAoSamplingCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -2211,7 +2211,7 @@ class AIO(object):
             See document of AioGetAiTransferCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAoTransferCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAoTransferCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAoTransferCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -2225,7 +2225,7 @@ class AIO(object):
             See document of AioGetAoRepeatCount of API-USBP.
         """
         count = ctypes.c_long()
-        ret = DLL.AioGetAoRepeatCount(self.Id, ctypes.byref(count))
+        ret = DLL.AioGetAoRepeatCount(self.Id, count)
         if ret != 0: #failed
             raise ValueError('AioGetAoRepeatCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -2271,7 +2271,7 @@ class AIO(object):
             Data (0 or 1).
         """
         data = ctypes.c_short()
-        ret = DLL.AioInputDiBit(self.Id, bit, ctypes.byref(data))
+        ret = DLL.AioInputDiBit(self.Id, bit, data)
         if ret != 0: #failed
             raise ValueError('AioInputDiBit failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -2289,7 +2289,7 @@ class AIO(object):
             Data (0-255).
         """
         data = ctypes.c_short()
-        ret = DLL.AioInputDiByte(self.Id, port, ctypes.byref(data))
+        ret = DLL.AioInputDiByte(self.Id, port, data)
         if ret != 0: #failed
             raise ValueError('AioInputDiByte failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -2319,7 +2319,7 @@ class AIO(object):
             See ocument of AioGetDiFilter of API-USBP.
         """
         value = ctypes.c_short()
-        ret = DLL.AioGetDiFilter(self.Id, bit, ctypes.byref(value))
+        ret = DLL.AioGetDiFilter(self.Id, bit, value)
         if ret != 0: #failed
             raise ValueError('AioGetDiFilter failed (%s)' % self.getErrorString(ret))
         return value.value
@@ -2382,7 +2382,7 @@ class AIO(object):
             See document of AioGetDioDirection of API-USBP.
         """
         direction = ctypes.c_long()
-        ret = DLL.AioGetDioDirection(self.Id, ctypes.byref(direction))
+        ret = DLL.AioGetDioDirection(self.Id, direction)
         if ret != 0: #failed
             raise ValueError('AioGetDioDirection failed (%s)' % self.getErrorString(ret))
         return direction.value
@@ -2397,7 +2397,7 @@ class AIO(object):
         See document of AioGetCntMaxChannels of API-USBP.
         """
         channels = ctypes.c_short()
-        ret = DLL.AioGetCntMaxChannels(self.Id, ctypes.byref(channels))
+        ret = DLL.AioGetCntMaxChannels(self.Id, channels)
         if ret != 0: #failed
             raise ValueError('AioGetCntMaxChannels failed (%s)' % self.getErrorString(ret))
         return channels.value
@@ -2416,7 +2416,7 @@ class AIO(object):
         See document of AioGetCntComparisonMode of API-USBP.
         """
         mode = ctypes.c_short()
-        ret = DLL.AioGetCntComparisonMode(self.Id, ctypes.byref(mode))
+        ret = DLL.AioGetCntComparisonMode(self.Id, mode)
         if ret != 0: #failed
             raise ValueError('AioGetCntComparisonMode failed (%s)' % self.getErrorString(ret))
         return mode.value
@@ -2429,7 +2429,7 @@ class AIO(object):
         cPresetData = (ctypes.c_long*presetNumber)()
         for i in range(presetNumber):
             cPresetData[i] = presetData[i]
-        ret = DLL.AioSetCntPresetReg(self.Id, channel, presetNumber, ctypes.byref(cPresetData), flag)
+        ret = DLL.AioSetCntPresetReg(self.Id, channel, presetNumber, cPresetData, flag)
         if ret != 0: #failed
             raise ValueError('AioSetCntPresetReg failed (%s)' % self.getErrorString(ret))
     
@@ -2441,7 +2441,7 @@ class AIO(object):
         cComparisonData = (ctypes.c_long*presetNumber)()
         for i in range(presetNumber):
             cComparisonData[i] = presetData[i]
-        ret = DLL.AioSetCntComparisonReg(self.Id, channel, presetNumber, ctypes.byref(cComparisonData), flag)
+        ret = DLL.AioSetCntComparisonReg(self.Id, channel, presetNumber, cComparisonData, flag)
         if ret != 0: #failed
             raise ValueError('AioSetCntComparisonReg failed (%s)' % self.getErrorString(ret))
     
@@ -2459,7 +2459,7 @@ class AIO(object):
         See document of AioGetCntInputSignal of API-USBP.
         """    
         inputSignal = ctypes.c_short()
-        ret = DLL.AioGetCntInputSignal(self.Id, ctypes.byref(inputSignal))
+        ret = DLL.AioGetCntInputSignal(self.Id, inputSignal)
         if ret != 0: #failed
             raise ValueError('AioGetCntInputSignal failed (%s)' % self.getErrorString(ret))
         return inputSignal.value
@@ -2479,7 +2479,7 @@ class AIO(object):
         """
         hWnd = ctypes.c_int()
         event = ctypes.c_long()
-        ret = DLL.AioGetCntEvent(self.Id, channel, ctypes.byref(hWnd), ctypes.byref(event))
+        ret = DLL.AioGetCntEvent(self.Id, channel, hWnd, event)
         if ret != 0: #failed
             raise ValueError('AioGetCntEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
@@ -2506,7 +2506,7 @@ class AIO(object):
         See document of AioGetCntFilter of API-USBP.
         """
         value = ctypes.c_short()
-        ret = DLL.AioGetCntFilter(self.Id, channel, signal, ctypes.byref(value))
+        ret = DLL.AioGetCntFilter(self.Id, channel, signal, value)
         if ret != 0: #failed
             raise ValueError('AioGetCntFilter failed (%s)' % self.getErrorString(ret))
         return value.value
@@ -2542,7 +2542,7 @@ class AIO(object):
         See document of AioGetCntStatus of API-USBP.
         """
         status = ctypes.c_short()
-        ret = DLL.AioGetCntStatus(self.Id, channel, ctypes.byref(status))
+        ret = DLL.AioGetCntStatus(self.Id, channel, status)
         if ret != 0: #failed
             raise ValueError('AioGetCntStatus failed (%s)' % self.getErrorString(ret))
         return status.value
@@ -2552,7 +2552,7 @@ class AIO(object):
         See document of AioGetCntCount of API-USBP.
         """
         count = ctypes.c_short()
-        ret = DLL.AioGetCntCount(self.Id, channel, ctypes.byref(count))
+        ret = DLL.AioGetCntCount(self.Id, channel, count)
         if ret != 0: #failed
             raise ValueError('AioGetCntCount failed (%s)' % self.getErrorString(ret))
         return count.value
@@ -2585,7 +2585,7 @@ class AIO(object):
         """
         hWnd = ctypes.c_int()
         event = ctypes.c_long()
-        ret = DLL.AioGetTmEvent(self.Id, timerId, ctypes.byref(hWnd), ctypes.byref(event))
+        ret = DLL.AioGetTmEvent(self.Id, timerId, hWnd, event)
         if ret != 0: #failed
             raise ValueError('AioGetTmEvent failed (%s)' % self.getErrorString(ret))
         return (hWnd.value, event.value)
@@ -2624,7 +2624,7 @@ class AIO(object):
         See document of AioGetEcuSignal of API-USBP.
         """
         source = ctypes.c_short()
-        ret = DLL.AioGetEcuSignal(self.Id, destination, ctypes.byref(source))
+        ret = DLL.AioGetEcuSignal(self.Id, destination, source)
         if ret != 0: #failed
             raise ValueError('AioGetEcuSignal failed (%s)' % self.getErrorString(ret))
         return source.value

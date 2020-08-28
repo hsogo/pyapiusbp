@@ -284,7 +284,7 @@ def queryDioDeviceName():
     deviceName = (ctypes.c_char*256)()
     device = (ctypes.c_char*256)()
     for i in range(255):
-        ret = DLL.DioQueryDeviceName(i, ctypes.byref(deviceName), ctypes.byref(device))
+        ret = DLL.DioQueryDeviceName(i, deviceName, device)
         if ret == DIO_ERR_SUCCESS:
             devlist.append([deviceName.value, device.value])
         else:
@@ -302,7 +302,7 @@ class DIO(object):
         """
         self.Id = None
         cId = ctypes.c_short()
-        ret = DLL.DioInit(deviceName, ctypes.byref(cId))
+        ret = DLL.DioInit(deviceName, cId)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioInit failed (%s)' % self.getErrorString(ret))
         self.Id = cId.value
@@ -324,8 +324,8 @@ class DIO(object):
             Error code of Contec API-USBP DIO functions.
         """
         msg = (ctypes.c_char*256)()
-        DLL.DioGetErrorString(code,ctypes.byref(msg))
-        return msg.value
+        DLL.DioGetErrorString(code, msg)
+        return msg.value.decode('cp932')
     
     def reset(self):
         """
@@ -348,7 +348,7 @@ class DIO(object):
             Data (0-255).
         """
         data = ctypes.c_ubyte()
-        ret = DLL.DioInpByte(self.Id, portNo, ctypes.byref(data))
+        ret = DLL.DioInpByte(self.Id, portNo, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioInpByte failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -364,7 +364,7 @@ class DIO(object):
             Data (0 or 1).
         """
         data = ctypes.c_ubyte()
-        ret = DLL.DioInpBit(self.Id, bitNo, ctypes.byref(data))
+        ret = DLL.DioInpBit(self.Id, bitNo, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioInpBit failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -413,7 +413,7 @@ class DIO(object):
             Status of the port (0-255).
         """
         data = ctypes.c_ubyte()
-        ret = DLL.DioEchoBackByte(self.Id, portNo, ctypes.byref(data))
+        ret = DLL.DioEchoBackByte(self.Id, portNo, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioEchoBackByte failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -429,7 +429,7 @@ class DIO(object):
             Status of the bit (0 or 1).
         """
         data = ctypes.c_ubyte()
-        ret = DLL.DioEchoBackByte(self.Id, bitNo, ctypes.byref(data))
+        ret = DLL.DioEchoBackByte(self.Id, bitNo, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioEchoBackBit failed (%s)' % self.getErrorString(ret))
         return data.value
@@ -448,7 +448,7 @@ class DIO(object):
         data = (ctypes.c_ubyte*portNum)()
         for i in range(portNum):
             portNo[i] = portList[i]
-        ret = DLL.DioInpMultiByte(self.Id, ctypes.byref(portNo), portNum, ctypes.byref(data))
+        ret = DLL.DioInpMultiByte(self.Id, portNo, portNum, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioInpMultiByte failed (%s)' % self.getErrorString(ret))
         return list(data)
@@ -467,7 +467,7 @@ class DIO(object):
         data = (ctypes.c_ubyte*bitNum)()
         for i in range(bitNum):
             bitNo[i] = bitList[i]
-        ret = DLL.DioInpMultiBit(self.Id, ctypes.byref(bitNo), bitNum, ctypes.byref(data))
+        ret = DLL.DioInpMultiBit(self.Id, bitNo, bitNum, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioInpMultiBit failed (%s)' % self.getErrorString(ret))
         return list(data)
@@ -487,7 +487,7 @@ class DIO(object):
         for i in range(portNum):
             portNo[i] = portList[i]
             cdata[i] = data[i]
-        ret = DLL.DioOutMultiByte(self.Id, ctypes.byref(portNo), portNum, ctypes.byref(cdata))
+        ret = DLL.DioOutMultiByte(self.Id, portNo, portNum, cdata)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioOutMultiByte failed (%s)' % self.getErrorString(ret))
         
@@ -506,7 +506,7 @@ class DIO(object):
         for i in range(bitNum):
             bitNo[i] = bitList[i]
             cdata[i] = data[i]
-        ret = DLL.DioOutMultiBit(self.Id, ctypes.byref(bitNo), bitNum, ctypes.byref(cdata))
+        ret = DLL.DioOutMultiBit(self.Id, bitNo, bitNum, cdata)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioOutMultiBit failed (%s)' % self.getErrorString(ret))
     
@@ -524,7 +524,7 @@ class DIO(object):
         data = (ctypes.c_ubyte*portNum)()
         for i in range(portNum):
             portNo[i] = portList[i]
-        ret = DLL.DioEchoBackMultiByte(self.Id, ctypes.byref(portNo), portNum, ctypes.byref(data))
+        ret = DLL.DioEchoBackMultiByte(self.Id, portNo, portNum, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioEchoBackMultiByte failed (%s)' % self.getErrorString(ret))
         return list(data)
@@ -543,7 +543,7 @@ class DIO(object):
         data = (ctypes.c_ubyte*bitNum)()
         for i in range(bitNum):
             bitNo[i] = bitList[i]
-        ret = DLL.DioEchoBackMultiBit(self.Id, ctypes.byref(bitNo), bitNum, ctypes.byref(data))
+        ret = DLL.DioEchoBackMultiBit(self.Id, bitNo, bitNum, data)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioEchoBackMultiBit failed (%s)' % self.getErrorString(ret))
         return list(data)
@@ -554,7 +554,7 @@ class DIO(object):
         """
         inPortNum = ctypes.c_short()
         outPortNum = ctypes.c_short()
-        ret = DLL.DioGetMaxPorts(self.Id, ctypes.byref(inPortNum), ctypes.byref(outPortNum))
+        ret = DLL.DioGetMaxPorts(self.Id, inPortNum, outPortNum)
         if ret != DIO_ERR_SUCCESS:
             raise ValueError('DioGetMaxPorts failed (%s)' % self.getErrorString(ret))
         return {'in':inPortNum.value, 'out':outPortNum.value}
